@@ -11,14 +11,20 @@
   /* No select everything in page */
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none; }
+  user-select: none;
+}
 
 html {
-  height: 100%; }
+  height: 100%;
+}
 
 body {
   height: 100%;
-  overflow: hidden; }
+}
+
+ul {
+  list-style-type: none;
+}
 
 .nice-button {
   display: inline-block;
@@ -28,6 +34,8 @@ body {
   font: 16px Sans-serif;
   cursor: pointer;
   position: relative;
+  border: none;
+  margin-bottom: 4px;
   top: 0;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -43,19 +51,22 @@ body {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none; }
+  user-select: none;
+}
 
 .nice-button:hover {
   background: #06c;
   -webkit-box-shadow: 0 4px 0 #048;
   -moz-box-shadow: 0 4px 0 #048;
-  box-shadow: 0 4px 0 #048; }
+  box-shadow: 0 4px 0 #048;
+}
 
 .nice-button:active {
   top: 4px;
   -webkit-box-shadow: 0 0 0 #06c;
   -moz-box-shadow: 0 0 0 #06c;
-  box-shadow: 0 0 0 #06c; }
+  box-shadow: 0 0 0 #06c;
+}
 
 .nice-button:after {
   content: "";
@@ -72,9 +83,11 @@ body {
   -moz-transition: 0.2s ease-in-out;
   -ms-transition: 0.2s ease-in-out;
   -o-transition: 0.2s ease-in-out;
-  transition: 0.2s ease-in-out; }
+  transition: 0.2s ease-in-out;
+}
 
 .nice-button:active:after {
-  top: -4px; }
+  top: -4px;
+}
 
 /*# sourceMappingURL=standart.css.map */

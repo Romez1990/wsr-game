@@ -1,0 +1,66 @@
+body {
+	background: #1f2122;
+	color: #dadada;
+	font-family: sans-serif;
+}
+
+#start {
+	width: 320px;
+	height: 160px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: #333335;
+	border-radius: 5px;
+}
+
+#start input {
+	width: 75%;
+	font: 20px sans-serif;
+	background: #252526;
+	color: #adadad;
+	border: 1px solid #535353;
+	border-radius: 4px;
+	padding: 4px;
+}
+
+#start button {
+	margin-top: 30px;
+	padding: 8px 30px;
+}
+
+main {
+	height: 100%;
+}
+
+#app {
+	height: 100%;
+}
+
+#ui {
+	height: 100%;
+	position: relative;
+}
+
+#name {
+	position: absolute;
+	font: 25px Loma;
+}
+
+#time {
+	position: absolute;
+	font: 25px Loma;
+}
+
+#scale * {
+	position: absolute;
+	font: 15px Loma;
+	background: #000;
+	width: 300px;
+	margin: 5px;
+}
