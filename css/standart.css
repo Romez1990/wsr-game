@@ -1,0 +1,80 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+  /* Against <h> headers */
+  text-decoration: none;
+  /* Against <a> links (underline) */
+  outline: none;
+  /* No outline around <input> */
+  -webkit-user-select: none;
+  /* No select everything in page */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+
+html {
+  height: 100%; }
+
+body {
+  height: 100%;
+  overflow: hidden; }
+
+.nice-button {
+  display: inline-block;
+  padding: 7px 20px;
+  background: #08f;
+  color: #eee;
+  font: 16px Sans-serif;
+  cursor: pointer;
+  position: relative;
+  top: 0;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 4px 0 #06c;
+  -moz-box-shadow: 0 4px 0 #06c;
+  box-shadow: 0 4px 0 #06c;
+  -webkit-transition: 0.2s ease-in-out;
+  -moz-transition: 0.2s ease-in-out;
+  -ms-transition: 0.2s ease-in-out;
+  -o-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+
+.nice-button:hover {
+  background: #06c;
+  -webkit-box-shadow: 0 4px 0 #048;
+  -moz-box-shadow: 0 4px 0 #048;
+  box-shadow: 0 4px 0 #048; }
+
+.nice-button:active {
+  top: 4px;
+  -webkit-box-shadow: 0 0 0 #06c;
+  -moz-box-shadow: 0 0 0 #06c;
+  box-shadow: 0 0 0 #06c; }
+
+.nice-button:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: -4px;
+  left: 0;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-transition: 0.2s ease-in-out;
+  -moz-transition: 0.2s ease-in-out;
+  -ms-transition: 0.2s ease-in-out;
+  -o-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out; }
+
+.nice-button:active:after {
+  top: -4px; }
+
+/*# sourceMappingURL=standart.css.map */
