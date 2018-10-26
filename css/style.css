@@ -1,8 +1,10 @@
 body {
+  background: #8d8d8d;
+  font-family: sans-serif; }
+
+#app {
   background: #1f2122;
-  color: #dadada;
-  font-family: sans-serif;
-}
+  height: 100%; }
 
 #start {
   width: 320px;
@@ -16,8 +18,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   background: #333335;
-  border-radius: 5px;
-}
+  border-radius: 5px; }
 
 #start input {
   width: 75%;
@@ -26,43 +27,75 @@ body {
   color: #adadad;
   border: 1px solid #535353;
   border-radius: 4px;
-  padding: 4px;
-}
+  padding: 4px; }
 
 #start button {
   margin-top: 30px;
-  padding: 8px 30px;
-}
+  padding: 8px 30px; }
 
 main {
-  height: 100%;
-}
-
-#app {
-  height: 100%;
-}
+  height: 100%; }
 
 #ui {
   height: 100%;
   position: relative;
-}
+  color: #dadada; }
 
 #name {
   position: absolute;
-  font: 25px Loma;
-}
+  font: 24px/24px Loma; }
 
 #time {
   position: absolute;
-  font: 25px Loma;
-}
+  left: 50%;
+  transform: translate(-50%, 0);
+  font: 25px/1em Loma; }
 
-#scale * {
+#properties {
   position: absolute;
-  font: 15px Loma;
-  background: #000;
+  bottom: 0;
+  display: flex;
+  flex-direction: column-reverse; }
+
+.scale {
   width: 300px;
-  margin: 5px;
-}
+  height: 32px;
+  background: #252829;
+  border: 2px solid #1a1c1d;
+  border-radius: 50px;
+  margin: 4px 2px;
+  position: relative; }
+
+.scale p {
+  display: block;
+  position: absolute;
+  height: 100%;
+  border-radius: 50px;
+  font: 20px/32px Loma;
+  padding-left: 10px; }
+
+#hp p {
+  background: red;
+  width: 60%; }
+
+#mp p {
+  background: mediumblue;
+  width: 40%; }
+
+.ability {
+  width: 60px;
+  height: 60px;
+  background: #252829 no-repeat center;
+  background-size: 60px 60px;
+  border: 2px solid #1a1c1d;
+  border-radius: 50%;
+  padding: 9px;
+  cursor: pointer; }
+
+#shield {
+  background-image: url("../img/Artboard.png"); }
+
+#boost {
+  background-image: url("../img/Korabl.png"); }
 
 /*# sourceMappingURL=style.css.map */

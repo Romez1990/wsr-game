@@ -9,13 +9,14 @@
 	
 	<link rel="stylesheet" href="css/standart.css">
 	<link rel="stylesheet" href="css/style.css">
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="js/script.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script src="js/script.js" defer></script>
 </head>
 <body>
 
 <div id="app">
 	<!-- Start window -->
+	<!--<div id="start">-->
 	<div id="start" style="display: none">
 		<input type="text" placeholder="Enter your name">
 		<button class="nice-button">Start</button>
@@ -23,14 +24,18 @@
 	
 	<!-- Game window -->
 	<main>
-	<!--<main style="display: none">-->
+		<!--<main style="display: none">-->
 		<div id="ui">
 			<div id="name">Name</div>
 			<div id="time">00:00</div>
-			<div id="scale">
-				<div id="hp">100</div>
-				<div id="mp">100</div>
+			<div id="properties">
+				<div class="scale" id="hp"><p>60</p></div>
+				<div class="scale" id="mp"><p>40</p></div>
+				
+				<div class="ability" id="shield"></div>
+				<div class="ability" id="boost"></div>
 			</div>
+		
 		</div>
 	</main>
 	
