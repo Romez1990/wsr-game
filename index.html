@@ -7,7 +7,6 @@
 	      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	
-	<link rel="stylesheet" href="css/standart.css">
 	<link rel="stylesheet" href="css/style.css">
 	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script src="js/script.js" defer></script>
@@ -23,8 +22,7 @@
 	</div>
 	
 	<!-- Game window -->
-	<main>
-		<!--<main style="display: none">-->
+	<div id="game">
 		<div id="ui">
 			<div id="name">Name</div>
 			<div id="time">00:00</div>
@@ -35,10 +33,14 @@
 				<div class="ability" id="shield"></div>
 				<div class="ability" id="boost"></div>
 			</div>
-		
 		</div>
-	</main>
-	
+		
+		<main>
+			
+			<div id="player"></div>
+		
+		</main>
+	</div>
 	<!-- Records table -->
 	<div id="table"></div>
 </div>
