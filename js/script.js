@@ -58,10 +58,6 @@ $(document).on('keyup', (e) => {
 	if (e.keyCode === 39 || e.keyCode === 68) {
 		motion.right = false;
 	}
-	
-	setTimeout(() => {
-		one = false;
-	}, 20);
 });
 
 function move() {
@@ -83,6 +79,7 @@ function move() {
 			player.css('transform', 'rotate(90deg)');
 		} else {
 			clearInterval(interval);
+			one = false;
 		}
 	}, 20);
 }
