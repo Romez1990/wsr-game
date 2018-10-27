@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Test</title>
+	<title>SpaceX</title>
 	<meta charset="UTF-8">
 	<meta name="viewport"
 	      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	
 	<link rel="stylesheet" href="css/style.css">
-	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.js" defer></script>
 	<script src="js/script.js" defer></script>
 </head>
 <body>
 
 <div id="app">
 	<!-- Start window -->
-	<div id="start"style="display: none">
+	<div id="start">
 		<input type="text" placeholder="Enter your name">
-		<p>Fill in the name</p>
+		<p style="display: none"></p>
 		<button class="nice-button">Start</button>
 	</div>
 	
 	<!-- Game window -->
-	<div id="game">
+	<div id="game" style="display: none">
 		<div id="ui">
 			<div id="name">Name</div>
 			<div id="time">00:00</div>
 			<div id="properties">
-				<div class="scale" id="hp"><p>60</p></div>
-				<div class="scale" id="mp"><p>40</p></div>
+				<div class="scale" id="hp"><p>100</p></div>
+				<div class="scale" id="mp"><p>100</p></div>
 				
 				<div class="ability" id="shield"></div>
 				<div class="ability" id="boost"></div>

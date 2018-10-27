@@ -1,13 +1,60 @@
+startGame('Romez1990');
+
+//#region Warning
+
 let input = $('#start input');
 let warning = $('#start p');
 
 $('#start button').on('click', () => {
 	if (input.val().length === 0) {
-		//warning.fadeOut(300);
+		showWarning('Fill in the name');
+	} else if (input.val().length < 4) {
+		showWarning('The name is too short');
+	} else {
+		startGame(input.val());
 	}
 });
 
+input.on('keydown', () => {
+	hideWarning();
+});
+
+function showWarning(text) {
+	warning.fadeIn(300);
+	warning.text(text);
+}
+
+function hideWarning() {
+	warning.fadeOut(170);
+}
+
+//#endregion
+
+function startGame(name) {
+	$('#start').css('display', 'none');
+	$('#name').text(name);
+	$('#game').css('display', 'block');
+	
+	let secondsPassed = 0;
+	
+	setInterval(() => {
+		secondsPassed++;
+		setTime(secondsPassed);
+	}, 1000);
+}
+
+function setTime(secondsPassed) {
+	let second = secondsPassed % 60;
+	let minute = (secondsPassed - second) / 60;
+	
+	minute = minute < 10 ? '0' + minute : minute;
+	second = second < 10 ? '0' + second : second;
+	
+	$('#time').text(minute + ':' + second);
+}
+
 //#region Motion
+
 const speed = 3;
 
 let player = $('#player');
