@@ -6,7 +6,8 @@ body {
 }
 
 #app, #game, #ui, main {
-	height: 100%;
+	width: 100vw;
+	height: 100vh;
 }
 
 #app {
@@ -31,10 +32,10 @@ body {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%) scale(1.4);
 	background: #333335;
 	border-radius: 5px;
-	
+
 	input {
 		width: 75%;
 		font: 20px sans-serif;
@@ -44,36 +45,44 @@ body {
 		border-radius: 4px;
 		padding: 4px;
 	}
-	
+
+	p {
+		margin-top: 5px;
+		width: 75%;
+		color: red;
+		font-size: 18px;
+		font-weight: bold;
+	}
+
 	button {
-		margin-top: 30px;
+		margin-top: 5px;
 		padding: 8px 30px;
 	}
 }
 
 #ui {
-	position: relative;
+	position: absolute;
 	color: #dadada;
-	
+
 	#name {
 		position: absolute;
 		font: 24px/24px Loma;
 	}
-	
+
 	#time {
 		position: absolute;
 		left: 50%;
 		transform: translate(-50%, 0);
 		font: 25px/1em Loma;
 	}
-	
+
 	#properties {
 		position: absolute;
 		bottom: 0;
 		display: flex;
 		flex-direction: column-reverse;
 	}
-	
+
 	.scale {
 		width: 300px;
 		height: 32px;
@@ -82,7 +91,7 @@ body {
 		border-radius: 50px;
 		margin: 4px 2px;
 		position: relative;
-		
+
 		p {
 			display: block;
 			position: absolute;
@@ -92,42 +101,48 @@ body {
 			padding-left: 10px;
 		}
 	}
-	
+
 	#hp p {
 		background: red;
 		width: 60%;
 	}
-	
+
 	#mp p {
 		background: mediumblue;
 		width: 40%;
 	}
-	
+
 	.ability {
 		width: 60px;
 		height: 60px;
 		background: #252829 no-repeat center;
-		background-size: 60px 60px;
 		border: 2px solid #1a1c1d;
 		border-radius: 50%;
-		padding: 9px;
 		cursor: pointer;
 	}
-	
+
 	#shield {
-		background-image: url("../img/Artboard.png");
+		background-image: url("../img/shield.png");
+		background-size: 47px 47px;
 	}
-	
+
 	#boost {
-		background-image: url("../img/Korabl.png");
+		background-image: url("../img/spaceship.png");
+		background-size: 42px 42px;
+		background-position-y: 6px;
 	}
 }
 
 main {
+	position: absolute;
+
 	#player {
 		position: absolute;
-		width: 50px;
-		height: 50px;
-		background-image: url("../img/Korabl.png");
+		width: 70px;
+		height: 70px;
+		background: url("../img/spaceship.png") center no-repeat / 70px 70px;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%) rotate(0deg);
 	}
 }

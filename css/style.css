@@ -11,17 +11,20 @@
   /* No select everything in page */
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none; }
+  user-select: none;
+}
 
 html {
-  height: 100%; }
+  height: 100%;
+}
 
 body {
   height: 100%;
-  overflow: hidden; }
+}
 
 ul {
-  list-style-type: none; }
+  list-style-type: none;
+}
 
 .nice-button {
   display: inline-block;
@@ -48,19 +51,22 @@ ul {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none; }
+  user-select: none;
+}
 
 .nice-button:hover {
   background: #06c;
   -webkit-box-shadow: 0 4px 0 #048;
   -moz-box-shadow: 0 4px 0 #048;
-  box-shadow: 0 4px 0 #048; }
+  box-shadow: 0 4px 0 #048;
+}
 
 .nice-button:active {
   top: 4px;
   -webkit-box-shadow: 0 0 0 #06c;
   -moz-box-shadow: 0 0 0 #06c;
-  box-shadow: 0 0 0 #06c; }
+  box-shadow: 0 0 0 #06c;
+}
 
 .nice-button:after {
   content: "";
@@ -77,17 +83,22 @@ ul {
   -moz-transition: 0.2s ease-in-out;
   -ms-transition: 0.2s ease-in-out;
   -o-transition: 0.2s ease-in-out;
-  transition: 0.2s ease-in-out; }
+  transition: 0.2s ease-in-out;
+}
 
 .nice-button:active:after {
-  top: -4px; }
+  top: -4px;
+}
 
 body {
   background: #8d8d8d;
-  font-family: sans-serif; }
+  font-family: sans-serif;
+}
 
 #app, #game, #ui, main {
-  height: 100%; }
+  width: 100vw;
+  height: 100vh;
+}
 
 #app {
   background: #1f2122;
@@ -98,7 +109,8 @@ body {
   top: 70px;
   left: 50%;
   transform: translate(-50%, 0);
-  */ }
+  */
+}
 
 #start {
   width: 320px;
@@ -110,9 +122,10 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(1.4);
   background: #333335;
-  border-radius: 5px; }
+  border-radius: 5px;
+}
 #start input {
   width: 75%;
   font: 20px sans-serif;
@@ -120,27 +133,40 @@ body {
   color: #adadad;
   border: 1px solid #535353;
   border-radius: 4px;
-  padding: 4px; }
+  padding: 4px;
+}
+#start p {
+  margin-top: 5px;
+  width: 75%;
+  color: red;
+  font-size: 18px;
+  font-weight: bold;
+}
 #start button {
-  margin-top: 30px;
-  padding: 8px 30px; }
+  margin-top: 5px;
+  padding: 8px 30px;
+}
 
 #ui {
-  position: relative;
-  color: #dadada; }
+  position: absolute;
+  color: #dadada;
+}
 #ui #name {
   position: absolute;
-  font: 24px/24px Loma; }
+  font: 24px/24px Loma;
+}
 #ui #time {
   position: absolute;
   left: 50%;
   transform: translate(-50%, 0);
-  font: 25px/1em Loma; }
+  font: 25px/1em Loma;
+}
 #ui #properties {
   position: absolute;
   bottom: 0;
   display: flex;
-  flex-direction: column-reverse; }
+  flex-direction: column-reverse;
+}
 #ui .scale {
   width: 300px;
   height: 32px;
@@ -148,38 +174,53 @@ body {
   border: 2px solid #1a1c1d;
   border-radius: 50px;
   margin: 4px 2px;
-  position: relative; }
+  position: relative;
+}
 #ui .scale p {
   display: block;
   position: absolute;
   height: 100%;
   border-radius: 50px;
   font: 20px/32px Loma;
-  padding-left: 10px; }
+  padding-left: 10px;
+}
 #ui #hp p {
   background: red;
-  width: 60%; }
+  width: 60%;
+}
 #ui #mp p {
   background: mediumblue;
-  width: 40%; }
+  width: 40%;
+}
 #ui .ability {
   width: 60px;
   height: 60px;
   background: #252829 no-repeat center;
-  background-size: 60px 60px;
   border: 2px solid #1a1c1d;
   border-radius: 50%;
-  padding: 9px;
-  cursor: pointer; }
+  cursor: pointer;
+}
 #ui #shield {
-  background-image: url("../img/Artboard.png"); }
+  background-image: url("../img/shield.png");
+  background-size: 47px 47px;
+}
 #ui #boost {
-  background-image: url("../img/Korabl.png"); }
+  background-image: url("../img/spaceship.png");
+  background-size: 42px 42px;
+  background-position-y: 6px;
+}
 
+main {
+  position: absolute;
+}
 main #player {
   position: absolute;
-  width: 50px;
-  height: 50px;
-  background-image: url("../img/Korabl.png"); }
+  width: 70px;
+  height: 70px;
+  background: url("../img/spaceship.png") center no-repeat/70px 70px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+}
 
 /*# sourceMappingURL=style.css.map */
