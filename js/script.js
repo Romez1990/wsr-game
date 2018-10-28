@@ -1,5 +1,4 @@
 startGame('Romez1990');
-
 //#region Warning
 
 let input = $('#start input');
@@ -30,6 +29,8 @@ function hideWarning() {
 
 //#endregion
 
+//#region Game
+
 function startGame(name) {
 	$('#start').css('display', 'none');
 	$('#name').text(name);
@@ -52,6 +53,8 @@ function setTime(secondsPassed) {
 	
 	$('#time').text(minute + ':' + second);
 }
+
+//#endregion
 
 //#region Motion
 
@@ -132,3 +135,136 @@ function move() {
 }
 
 //#endregion
+
+//#region Meteors
+
+function toDegrees(angle) {
+	return angle * (180 / Math.PI);
+}
+
+function toRadians(angle) {
+	return angle * (Math.PI / 180);
+}
+
+let idm = 1;
+let meteors = [];
+
+// px takes from css
+let meteorTypes = [
+	{size: 'small', px: 30},
+	{size: 'medium', px: 50},
+	{size: 'large', px: 90}
+];
+
+setInterval(() => {
+	if (meteors.length === 5) return;
+	
+	launchMeteor();
+}, 3500);
+
+let app = $('#app');
+
+function launchMeteor(a) {
+	// Random angle for meteor fly
+	let angle = toRadians(Math.floor(Math.random() * 360));
+	// let angle = toRadians(0);
+	
+	// console.log(toDegrees(angle));
+	$('#line').css('transform', `translate(-50%, -50%) rotate(${-toDegrees(angle)}deg)`);
+	
+	let width = app.width() / 2;
+	// width = 1200;
+	
+	let height = app.height() / 2;
+	// height = 1000;
+	
+	// Hypotenuse of window
+	let hypotenuse = Math.pow(Math.pow(width, 2) + Math.pow(height, 2), 0.5);
+	
+	let sin = Math.sin(angle);
+	console.log('sin = ' + Math.round(Math.sin(angle) * 10000) / 10000);
+	let sinWin = height / hypotenuse;
+	console.log('sinWin = ' + Math.round(width / hypotenuse * 10000) / 10000);
+	let cos = Math.cos(angle);
+	console.log('cos = ' + Math.round(cos * 10000) / 10000);
+	
+	let x, y;
+	
+	let selectedMeteor = meteorTypes[Math.floor(Math.random() * 3)];
+	// let selectedMeteor = meteorTypes[1];
+	
+	if (toDegrees(angle) >= 0 && toDegrees(angle) <= 135 || toDegrees(angle) >= 315 && toDegrees(angle) < 360) {
+		if (Math.round(sin * 10000) / 10000 > Math.round(sinWin * 10000) / 10000) {
+			console.log('Top');
+			let h = height / sin;
+			x = h * cos;
+			y = -height;
+			
+			y -= selectedMeteor.px / 2;
+		} else if (sin < sinWin) {
+			console.log('Right');
+			let h = width / cos;
+			x = width;
+			y = -h * sin;
+			
+			x += selectedMeteor.px / 2;
+		} else if (cos > 0) {
+			console.log('Right-top');
+			x = width;
+			y = -height;
+			
+			
+			x += selectedMeteor.px / 2;
+			y += selectedMeteor.px / 2;
+		} else if (cos < 0) {
+			console.log('Left-top');
+			x = -width;
+			y = -height;
+			
+			x -= selectedMeteor.px / 2;
+			y -= selectedMeteor.px / 2;
+		}
+	} else {
+		if (Math.abs(Math.round(sin * 10000)) / 10000 > Math.round(sinWin * 10000) / 10000) {
+			console.log('Bottom');
+			let h = height / sin;
+			x = -h * cos;
+			y = height;
+			
+			y += selectedMeteor.px / 2;
+		} else if (Math.abs(Math.round(sin * 10000)) / 10000 < Math.abs(Math.round(sinWin * 10000) / 10000)) {
+			console.log('Left');
+			let h = width / cos;
+			x = -width;
+			y = h * sin;
+			
+			x -= selectedMeteor.px / 2;
+		} else if (cos < 0) {
+			console.log('Left-bottom');
+			x = -width;
+			y = height;
+			
+			x += selectedMeteor.px / 2;
+			y += selectedMeteor.px / 2;
+		}
+	}
+	
+	addMeteor(selectedMeteor.size, x, y);
+}
+
+function addMeteor(size, x, y) {
+	let id = 'm' + idm++;
+	let meteor = $(`<div class="meteor ${size}" id="${id}"></div>`);
+	
+	meteor.css('left', app.width() / 2 + x);
+	meteor.css('top', app.height() / 2 + y);
+	
+	$('#meteors').append(meteor);
+	meteors.push(id);
+	
+	
+}
+
+//#endregion
+
+launchMeteor();
