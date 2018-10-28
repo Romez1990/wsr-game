@@ -13,13 +13,13 @@ body {
 
 #app {
 	background: #1f2122;
-	//height: 100%;
-	width: 600px;
-	height: 600px;
-	position: absolute;
-	top: 70px;
-	left: 50%;
-	transform: translate(-50%, 0);
+	height: 100%;
+	//width: 500px;
+	//height: 500px;
+	//position: absolute;
+	//top: 50%;
+	//left: 50%;
+	//transform: translate(-50%, -50%);
 }
 
 #start {
@@ -35,7 +35,7 @@ body {
 	transform: translate(-50%, -50%) scale(1.4);
 	background: #333335;
 	border-radius: 5px;
-
+	
 	input {
 		width: 75%;
 		font: 20px sans-serif;
@@ -45,7 +45,7 @@ body {
 		border-radius: 4px;
 		padding: 4px;
 	}
-
+	
 	p {
 		position: absolute;
 		margin-top: -3px;
@@ -54,7 +54,7 @@ body {
 		font-size: 18px;
 		font-weight: bold;
 	}
-
+	
 	button {
 		margin-top: 30px;
 		padding: 8px 30px;
@@ -64,26 +64,26 @@ body {
 #ui {
 	position: absolute;
 	color: #dadada;
-
+	
 	#name {
 		position: absolute;
 		font: 24px/24px Loma;
 	}
-
+	
 	#time {
 		position: absolute;
 		left: 50%;
 		transform: translate(-50%, 0);
 		font: 25px/1em Loma;
 	}
-
+	
 	#properties {
 		position: absolute;
 		bottom: 0;
 		display: flex;
 		flex-direction: column-reverse;
 	}
-
+	
 	.scale {
 		width: 300px;
 		height: 34px;
@@ -93,41 +93,64 @@ body {
 		border-radius: 50px;
 		margin: 4px 2px;
 		position: relative;
-
+		
 		p {
 			box-sizing: border-box;
 			display: block;
 			position: absolute;
 			height: 100%;
-			width: 60%;
+			width: 100%;
 			border-radius: 50px;
-			font: 20px/32px Loma;
+			font: 20px/28px Loma;
 			padding-left: 10px;
+			transition: width 0.2s ease-in-out;
 		}
 	}
-
+	
 	#hp p {
 		background: red;
 	}
-
+	
 	#mp p {
 		background: mediumblue;
 	}
-
+	
+	$ability-size: 60px;
+	
 	.ability {
-		width: 60px;
-		height: 60px;
+		width: $ability-size;
+		height: $ability-size;
 		background: #252829 no-repeat center;
 		border: 2px solid #1a1c1d;
 		border-radius: 50%;
 		cursor: pointer;
+		position: relative;
+		
+		.filling {
+			width: $ability-size;
+			position: absolute;
+			bottom: 0;
+			top: 100%;
+			overflow: hidden;
+			
+			&:after {
+				content: '';
+				display: block;
+				background: rgba(51, 51, 51, 0.57);
+				width: $ability-size;
+				height: $ability-size;
+				position: absolute;
+				bottom: 0;
+				border-radius: 50%;
+			}
+		}
 	}
-
+	
 	#shield {
 		background-image: url("../img/shield.png");
 		background-size: 47px 47px;
 	}
-
+	
 	#boost {
 		background-image: url("../img/spaceship.png");
 		background-size: 42px 42px;
@@ -137,9 +160,9 @@ body {
 
 main {
 	position: absolute;
-
+	
 	$player-size: 75px;
-
+	
 	#player {
 		position: absolute;
 		width: $player-size;
@@ -148,43 +171,84 @@ main {
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%) rotate(0deg);
+		//border-radius: 50%;
+		//border: 1px solid red;
+		
+		$shield-margin: 35px;
+		
+		#shield-on {
+			position: absolute;
+			top: -$shield-margin;
+			bottom: -$shield-margin;
+			left: -$shield-margin;
+			right: -$shield-margin;
+			background: url("../img/shield.png") center no-repeat / ($player-size + $shield-margin) ($player-size + $shield-margin);
+			background-position-y: 23px;
+			opacity: 0;
+			transition: opacity 0.5s ease-in-out;
+		}
+	}
+	
+	.meteor {
+		position: absolute;
+		top: 30%;
+		left: 70%;
+		transform: translate(-50%, -50%);
+		background: center no-repeat;
+		//border-radius: 50%;
+		//border: 1px solid red;
+	}
+	
+	$small-size: 30px;
+	
+	.small {
+		width: $small-size;
+		height: $small-size;
+		background-image: url('../img/meteor_small.png');
+		background-size: $small-size $small-size;
+	}
+	
+	$medium-size: 50px;
+	
+	.medium {
+		width: $medium-size;
+		height: $medium-size;
+		background-image: url('../img/meteor_medium.png');
+		background-size: $medium-size $medium-size;
+	}
+	
+	$large-size: 90px;
+	
+	.large {
+		width: $large-size;
+		height: $large-size;
+		background-image: url('../img/meteor_large.png');
+		background-size: $large-size $large-size;
+	}
+	
+	$explosion-size: 70px;
+	
+	.explosion {
+		position: absolute;
+		transform: translate(-50%, -50%);
+		width: $explosion-size;
+		height: $explosion-size;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: $explosion-size $explosion-size;
+		z-index: 5;
+	}
+	
+	.explosion1 {
+		background-image: url("../img/explosion1.png");
+	}
+	
+	.explosion2 {
+		background-image: url("../img/explosion2.png");
 	}
 }
 
-.meteor {
-	position: absolute;
-	top: 30%;
-	left: 70%;
-	transform: translate(-50%, -50%);
-	background: center no-repeat;
-}
 
-$small-size: 30px;
-
-.small {
-	width: $small-size;
-	height: $small-size;
-	background-image: url('../img/meteor_small.png');
-	background-size: $small-size $small-size;
-}
-
-$medium-size: 50px;
-
-.medium {
-	width: $medium-size;
-	height: $medium-size;
-	background-image: url('../img/meteor_medium.png');
-	background-size: $medium-size $medium-size;
-}
-
-$large-size: 90px;
-
-.large {
-	width: $large-size;
-	height: $large-size;
-	background-image: url('../img/meteor_large.png');
-	background-size: $large-size $large-size;
-}
 
 /*
 #line {
