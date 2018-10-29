@@ -6,7 +6,7 @@ let
 	fps = 60,
 	delay = 1000 / fps,
 	playerSpeed = 150, // px/s
-	playerSpeedBoost = playerSpeed * 2.5, // px/s
+	playerSpeedBoost = playerSpeed * 2.75, // px/s
 	meteorSpeed = 300 // px/s
 ;
 
@@ -311,8 +311,6 @@ function createMeteor() {
 		}
 	}
 	
-	//#endregion
-	
 	let size = selectedMeteor.size;
 	
 	let meteor = {
@@ -323,6 +321,10 @@ function createMeteor() {
 	meteor.dom.css('top', app.height() / 2 + y);
 	
 	$('#meteors').append(meteor.dom);
+	
+	//#endregion
+	
+	//#region Rotation
 	
 	let angle2 = randomRangeFloat(1, 7);
 	angle2 = randomRange(2) === 0 ? angle2 : -angle2;
@@ -347,6 +349,8 @@ function createMeteor() {
 	meteor.movementTimer = setInterval(meteor.meteorMovement, delay);
 	
 	meteors.push(meteor);
+	
+	//#endregion
 }
 
 function removeMeteors() {
@@ -362,11 +366,6 @@ function removeMeteors() {
 			left + meteors[i].dom.width() + 5 < 0 ||
 			top + meteors[i].dom.width() + 5 < 0
 		) {
-			let index = isColliding.indexOf(meteors[i].dom);
-			if (index !== -1) {
-				isColliding.splice(index, 1);
-			}
-			
 			meteors[i].dom.detach();
 			clearInterval(meteors[i].movementTimer);
 			meteors.splice(meteors.indexOf(meteors[i]), 1);
@@ -389,8 +388,6 @@ function collisionCheck(x1, y1, r1, x2, y2, r2) {
 	}
 }
 
-let isColliding = [];
-
 function checkAllMeteorsToCollision() {
 	meteors.forEach((meteor) => {
 		let r1 = player.width() / 2;
@@ -406,8 +403,6 @@ function checkAllMeteorsToCollision() {
 		
 		if (collision === false) return;
 		
-		if (isColliding.indexOf(meteor.dom) !== -1) return;
-		
 		let damage;
 		if (meteor.dom.hasClass('small')) {
 			damage = 10;
@@ -419,7 +414,15 @@ function checkAllMeteorsToCollision() {
 		
 		this.damage(damage);
 		
-		isColliding.push(meteor.dom);
+		meteor.dom.detach();
+		let index = meteors.indexOf(meteor);
+		if (index !== -1) {
+			meteors.splice(index, 1);
+		}
+		clearInterval(meteor.movementTimer);
+		for (let key in meteor) {
+			delete meteor[key];
+		}
 		
 		let x = collision[0];
 		let y = collision[1];
@@ -448,8 +451,8 @@ let shield = {
 	bool: false,
 	set: setShield,
 	remove: removeShield,
-	recharge: 5,
-	actionTime: 3,
+	recharge: 10,
+	actionTime: 5,
 	mp: 15
 };
 let boost = {
@@ -457,8 +460,8 @@ let boost = {
 	bool: false,
 	set: setBoost,
 	remove: removeBoost,
-	recharge: 5,
-	actionTime: 3,
+	recharge: 10,
+	actionTime: 5,
 	mp: 15
 };
 
@@ -521,8 +524,10 @@ function regenmp() {
 }
 
 setInterval(() => {
+	if (meteorSpeed > 4000) return;
+	
 	meteorSpeed *= 1.5;
-}, 10000);
+}, 30000);
 
 let shieldOn = $('#shield-on');
 
@@ -599,4 +604,4 @@ function toRadians(angle) {
 
 //#endregion
 
-// startGame('Romez1990');
+startGame('Romez1990');
