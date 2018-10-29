@@ -1,3 +1,5 @@
+//TODO: Move all shortcuts to one function
+
 //#region Options
 
 let
@@ -66,7 +68,6 @@ function startGame(name) {
 	$(document).on('keydown', (e) => {
 		switch (e.keyCode) {
 			case 27:
-				console.log(1);
 				stopAllTimers();
 				break;
 		}
@@ -77,7 +78,7 @@ let timers = [];
 
 function setAllTimers() {
 	timers.push(setInterval(setTime, 1000));
-	timers.push(setInterval(addMeteor, 200));
+	timers.push(setInterval(createMeteor, 200));
 	timers.push(setInterval(removeMeteors, delay));
 	timers.push(setInterval(checkAllMeteorsToCollision, delay));
 }
@@ -87,6 +88,7 @@ function stopAllTimers() {
 		clearInterval(timers[0]);
 		timers.splice(0, 1);
 	}
+	
 }
 
 let secondsPassed = 0;
@@ -196,10 +198,10 @@ function move() {
 
 //#endregion
 
-//TODO: Review those timers and move it to the main function
 //#region Meteors
 
 let meteors = [];
+let app = $('#app');
 
 // px takes from css
 let meteorTypes = [
@@ -208,13 +210,13 @@ let meteorTypes = [
 	{size: 'large', px: 90}
 ];
 
-function addMeteor() {
+function createMeteor() {
 	if (meteors.length >= 5) return;
+	
+	//#region Set direction
 	
 	// Random angle for meteor fly
 	let angle = toRadians(randomRange(360));
-	
-	// $('#line').css('transform', `translate(-50%, -50%) rotate(${-toDegrees(angle)}deg)`);
 	
 	let width = app.width() / 2;
 	
@@ -309,55 +311,64 @@ function addMeteor() {
 		}
 	}
 	
+	//#endregion
+	
 	let size = selectedMeteor.size;
 	
-	let meteor = $(`<div class="meteor ${size}"></div>`);
+	let meteor = {
+		dom: $(`<div class="meteor ${size}"></div>`)
+	};
 	
-	meteor.css('left', app.width() / 2 + x);
-	meteor.css('top', app.height() / 2 + y);
+	meteor.dom.css('left', app.width() / 2 + x);
+	meteor.dom.css('top', app.height() / 2 + y);
 	
-	$('#meteors').append(meteor);
-	meteors.push(meteor);
+	$('#meteors').append(meteor.dom);
 	
 	let angle2 = randomRangeFloat(1, 7);
 	angle2 = randomRange(2) === 0 ? angle2 : -angle2;
 	let currentangle2 = 0;
 	
-	setInterval(() => {
-		let cos = Math.cos(toRadians(direction));
+	meteor.direction = direction;
+	meteor.currentAngle = currentangle2;
+	meteor.angle = angle2;
+	meteor.meteorMovement = () => {
+		let cos = Math.cos(toRadians(meteor.direction));
 		let x = meteorSpeed / fps * cos;
-		let sin = Math.sin(toRadians(direction));
+		let sin = Math.sin(toRadians(meteor.direction));
 		let y = -meteorSpeed / fps * sin;
-		meteor.css('top', parseFloat(meteor.css('top')) + y);
-		meteor.css('left', parseFloat(meteor.css('left')) + x);
+		meteor.dom.css('top', parseFloat(meteor.dom.css('top')) + y);
+		meteor.dom.css('left', parseFloat(meteor.dom.css('left')) + x);
 		
-		currentangle2 += angle2;
+		meteor.currentAngle += meteor.angle;
 		
-		meteor.css('transform', `rotate(${currentangle2}deg)`)
-	}, delay);
+		meteor.dom.css('transform', `translate(-50%, -50%) rotate(${meteor.currentAngle}deg)`)
+	};
+	
+	meteor.movementTimer = setInterval(meteor.meteorMovement, delay);
+	
+	meteors.push(meteor);
 }
-
-let app = $('#app');
 
 function removeMeteors() {
 	for (let i = 0; i < meteors.length; i++) {
-		let left = parseInt(meteors[i].css('left'));
-		let top = parseInt(meteors[i].css('top'));
-		let right = parseInt(meteors[i].css('right'));
-		let bottom = parseInt(meteors[i].css('bottom'));
+		let left = parseInt(meteors[i].dom.css('left'));
+		let top = parseInt(meteors[i].dom.css('top'));
+		let right = parseInt(meteors[i].dom.css('right'));
+		let bottom = parseInt(meteors[i].dom.css('bottom'));
 		
 		if (
-			right + meteors[i].width() + 5 < 0 ||
-			bottom + meteors[i].width() + 5 < 0 ||
-			left + meteors[i].width() + 5 < 0 ||
-			top + meteors[i].width() + 5 < 0
+			right + meteors[i].dom.width() + 5 < 0 ||
+			bottom + meteors[i].dom.width() + 5 < 0 ||
+			left + meteors[i].dom.width() + 5 < 0 ||
+			top + meteors[i].dom.width() + 5 < 0
 		) {
-			let index = isColliding.indexOf(meteors[i]);
+			let index = isColliding.indexOf(meteors[i].dom);
 			if (index !== -1) {
 				isColliding.splice(index, 1);
 			}
 			
-			meteors[i].detach();
+			meteors[i].dom.detach();
+			clearInterval(meteors[i].movementTimer);
 			meteors.splice(meteors.indexOf(meteors[i]), 1);
 		}
 	}
@@ -379,56 +390,57 @@ function collisionCheck(x1, y1, r1, x2, y2, r2) {
 }
 
 let isColliding = [];
-let main = $('main');
 
 function checkAllMeteorsToCollision() {
 	meteors.forEach((meteor) => {
-			let r1 = meteor.width() / 2;
-			let r2 = player.width() / 2;
-			let collision = collisionCheck(
-				parseInt(player.css('left')) + r2, parseInt(player.css('top')) + r2, r2,
-				parseInt(meteor.css('left')) + r1, parseInt(meteor.css('top')) + r1, r1
-			);
-			if (collision !== false) {
-				if (isColliding.indexOf(meteor) === -1) {
-					let damage;
-					if (meteor.hasClass('small')) {
-						damage = 10;
-					} else if (meteor.hasClass('medium')) {
-						damage = 20;
-					} else {
-						damage = 30;
-					}
-					
-					this.damage(damage);
-					
-					isColliding.push(meteor);
-					
-					let x = collision[0];
-					let y = collision[1];
-					
-					let explosion = $('<div class="explosion explosion1"></div>');
-					
-					explosion.css('left', x);
-					explosion.css('top', y);
-					
-					main.append(explosion);
-					
-					// explosion.addClass('explosion1');
-					setTimeout(() => {
-						explosion.removeClass('explosion1');
-						explosion.addClass('explosion2');
-						setTimeout(() => explosion.detach(), 170)
-					}, 170);
-				}
-			}
+		let r1 = player.width() / 2;
+		let x1 = parseInt(player.css('left'));
+		let y1 = parseInt(player.css('top'));
+		let r2 = meteor.dom.width() / 2;
+		let x2 = parseInt(meteor.dom.css('left'));
+		let y2 = parseInt(meteor.dom.css('top'));
+		let collision = collisionCheck(
+			x1, y1, r1,
+			x2, y2, r2
+		);
+		
+		if (collision === false) return;
+		
+		if (isColliding.indexOf(meteor.dom) !== -1) return;
+		
+		let damage;
+		if (meteor.dom.hasClass('small')) {
+			damage = 10;
+		} else if (meteor.dom.hasClass('medium')) {
+			damage = 20;
+		} else {
+			damage = 30;
 		}
-	)
+		
+		this.damage(damage);
+		
+		isColliding.push(meteor.dom);
+		
+		let x = collision[0];
+		let y = collision[1];
+		
+		let explosion = $('<div class="explosion explosion1"></div>');
+		
+		explosion.css('left', x);
+		explosion.css('top', y);
+		
+		$('main').append(explosion);
+		
+		setTimeout(() => {
+			explosion.removeClass('explosion1');
+			explosion.addClass('explosion2');
+			setTimeout(() => explosion.detach(), 170)
+		}, 170);
+	});
 }
 
 //#endregion
 
-//TODO: Refactor this
 //#region Abilities
 
 let shield = {
@@ -476,13 +488,13 @@ function activateAbility(ability) {
 	
 	if (!removemp(ability.mp)) return;
 	
-	setTimeout(() =>
-			ability.bool = false
-		, ability.recharge * 1000);
+	setTimeout(() => {
+		ability.bool = false
+	}, ability.recharge * 1000);
 	
-	setTimeout(() =>
-			ability.remove()
-		, ability.actionTime * 1000);
+	setTimeout(() => {
+		ability.remove()
+	}, ability.actionTime * 1000);
 }
 
 let mp = $('#mp p');
@@ -554,7 +566,7 @@ function damage(damage) {
 //#region Game over
 
 function gameOver() {
-	stopAllTimers();
+	// stopAllTimers();
 }
 
 //#endregion
@@ -578,11 +590,13 @@ function randomRangeFloat(min, max) {
 }
 
 function toDegrees(angle) {
-	return angle * (180 / Math.PI);
+	return angle * 180 / Math.PI;
 }
 
 function toRadians(angle) {
-	return angle * (Math.PI / 180);
+	return angle * Math.PI / 180;
 }
 
 //#endregion
+
+// startGame('Romez1990');

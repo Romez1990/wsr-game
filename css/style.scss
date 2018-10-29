@@ -13,13 +13,13 @@ body {
 
 #app {
 	background: #1f2122;
-	height: 100%;
-	//width: 500px;
-	//height: 500px;
-	//position: absolute;
-	//top: 50%;
-	//left: 50%;
-	//transform: translate(-50%, -50%);
+	//height: 100%;
+	width: 700px;
+	height: 700px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
 #start {
@@ -167,7 +167,8 @@ main {
 		position: absolute;
 		width: $player-size;
 		height: $player-size;
-		background: url("../img/spaceship.png") center no-repeat / $player-size $player-size;
+		background: url("../img/spaceship.png") center no-repeat;
+		background-size: $player-size $player-size;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%) rotate(0deg);
@@ -182,7 +183,8 @@ main {
 			bottom: -$shield-margin;
 			left: -$shield-margin;
 			right: -$shield-margin;
-			background: url("../img/shield.png") center no-repeat / ($player-size + $shield-margin) ($player-size + $shield-margin);
+			background: url("../img/shield.png") center no-repeat;
+			background-size: ($player-size + $shield-margin) ($player-size + $shield-margin);
 			background-position-y: 23px;
 			opacity: 0;
 			transition: opacity 0.5s ease-in-out;
@@ -247,18 +249,3 @@ main {
 		background-image: url("../img/explosion2.png");
 	}
 }
-
-
-
-/*
-#line {
-	//display: none;
-	width: 200%;
-	height: 2px;
-	background: #000;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-}
-*/
