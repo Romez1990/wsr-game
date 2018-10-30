@@ -668,3 +668,5 @@ function gameKeyUp(e) {
 //#endregion
 
 startGame('Romez1990');
+
+// pause();

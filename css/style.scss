@@ -44,10 +44,10 @@ $app-size: 600px;
 
 .paused {
 	-webkit-filter: blur(5px);
-	   -moz-filter: blur(5px);
-	     -o-filter: blur(5px);
-	    -ms-filter: blur(5px);
-	        filter: blur(5px);
+	-moz-filter: blur(5px);
+	-o-filter: blur(5px);
+	-ms-filter: blur(5px);
+	filter: blur(5px);
 }
 
 #start {
@@ -284,4 +284,13 @@ main {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+	
+	p {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		font-size: 26px;
+		color: #dadada;
+	}
 }
