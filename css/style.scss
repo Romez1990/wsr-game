@@ -13,10 +13,11 @@ body {
 	height: 100%;
 }
 
-$app-size: 600px;
-//$app-size: 100%;
+//$app-size: 600px;
+$app-size: 100%;
 
 #app {
+	color: #dadada;
 	background: #1f2122;
 	//height: 100%;
 	width: $app-size;
@@ -44,10 +45,10 @@ $app-size: 600px;
 
 .paused {
 	-webkit-filter: blur(5px);
-	-moz-filter: blur(5px);
-	-o-filter: blur(5px);
-	-ms-filter: blur(5px);
-	filter: blur(5px);
+		-moz-filter: blur(5px);
+		  -o-filter: blur(5px);
+		 -ms-filter: blur(5px);
+			  filter: blur(5px);
 }
 
 #start {
@@ -92,7 +93,6 @@ $app-size: 600px;
 
 #ui {
 	position: absolute;
-	color: #dadada;
 	
 	#name {
 		position: absolute;
@@ -291,6 +291,51 @@ main {
 		left: 50%;
 		transform: translate(-50%, -50%);
 		font-size: 26px;
-		color: #dadada;
+	}
+}
+
+#table-screen {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 500px;
+	background: #333335;
+	border-radius: 10px;
+	font-size: 22px;
+	z-index: 1;
+	
+	table {
+		width: 100%;
+		box-sizing: border-box;
+		padding: 10px;
+		
+		tr {
+			th:nth-child(1), td:nth-child(1) {
+				text-align: left;
+				width: 10%;
+			}
+			
+			th:nth-child(2), td:nth-child(2) {
+				text-align: left;
+				width: 40%;
+			}
+			
+			th:nth-child(3), td:nth-child(3) {
+				text-align: center;
+				width: 26%;
+			}
+			
+			th:nth-child(4), td:nth-child(4) {
+				text-align: center;
+				width: 23%;
+			}
+		}
+	}
+	
+	button {
+		display: block;
+		margin: 8px auto 18px;
+		padding: 8px 35px;
 	}
 }

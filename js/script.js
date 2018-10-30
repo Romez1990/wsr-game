@@ -63,12 +63,27 @@ function startKeyDown(e) {
 
 //#region Game
 
+let table = $('#table-screen');
+let hp = $('#hp p');
+let mp = $('#mp p');
+let secondsPassed = 0;
+
 let app = $('#app');
 let player = $('#player');
 
 function startGame(name) {
+	table.fadeOut(250);
+	game.removeClass('paused');
+	hp.text(100);
+	hp.css('width', '100%');
+	hp.css('background', 'red');
+	mp.text(100);
+	mp.css('width', '100%');
+	secondsPassed = 0;
+	$('#time').text('00:00');
+	
 	$('#start').css('display', 'none');
-	$('#name').text(name);
+	$('#username').text(name);
 	$('#game').css('display', 'block');
 	
 	setAllTimers();
@@ -107,8 +122,6 @@ function stopAllTimers() {
 		clearInterval(meteor.movementTimer);
 	});
 }
-
-let secondsPassed = 0;
 
 function setTime() {
 	secondsPassed++;
@@ -392,8 +405,6 @@ function activateAbility(ability) {
 	}, ability.actionTime * 1000);
 }
 
-let mp = $('#mp p');
-
 function removemp(removemp) {
 	let newmp = parseInt(mp.text()) - removemp;
 	if (newmp > 0) {
@@ -440,8 +451,6 @@ function removeBoost() {
 	playerSpeed = normalSpeed;
 }
 
-let hp = $('#hp p');
-
 function damage(damage) {
 	if (shield.enable) return;
 	
@@ -453,7 +462,7 @@ function damage(damage) {
 		hp.text(0);
 		hp.css('width', 0);
 		setTimeout(() => {
-			hp.css('background', 'none')
+			hp.css('background', 'none');
 			gameOver();
 		}, 270);
 	}
@@ -558,55 +567,9 @@ function pause() {
 
 //#endregion
 
-//#region Game over
-
-let table = $('#table');
-
-function gameOver() {
-	stopAllTimers();
-	up = down = left = right = false;
-	game.toggleClass('paused');
-	$(document).off('keydown');
-	$(document).off('keyup');
-	
-	table.fadeIn(250);
-}
-
-//#endregion
-
-//#region Helpers
-
-function randomRange(min, max) {
-	if (max === undefined) {
-		return Math.floor(Math.random() * min);
-	} else {
-		return Math.floor(Math.random() * (max - min) + min);
-	}
-}
-
-function randomRangeFloat(min, max) {
-	if (max === undefined) {
-		return Math.random() * min;
-	} else {
-		return Math.random() * (max - min) + min;
-	}
-}
-
-function toDegrees(angle) {
-	return angle * 180 / Math.PI;
-}
-
-function toRadians(angle) {
-	return angle * Math.PI / 180;
-}
-
-//#endregion
-
 //#region Key pressing
 
 function gameKeyDown(e) {
-	console.log(1);
-	
 	switch (e.keyCode) {
 		case 27: // Esc
 			pause();
@@ -654,8 +617,6 @@ function gameKeyDown(e) {
 }
 
 function gameKeyUp(e) {
-	console.log(2);
-	
 	if (isPause) return;
 	
 	switch (e.keyCode) {
@@ -680,5 +641,71 @@ function gameKeyUp(e) {
 
 //#endregion
 
+//#region Game over
+
+function gameOver() {
+	stopAllTimers();
+	up = down = left = right = false;
+	game.toggleClass('paused');
+	$(document).off('keydown');
+	$(document).off('keyup');
+	
+	let date = new Date();
+	
+	$.ajax({
+		url: '../php/table.php',
+		method: 'POST',
+		data: {
+			username: $('#username').val(),
+			score: secondsPassed,
+			time: date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear().toString().substring(2,4)
+		},
+		success: (data) => {
+			JSON.parse(data);
+			
+			table.fadeIn(250);
+		}
+	});
+}
+
+//#endregion
+
+//#region Table
+
+let startOver = $('#table-screen button');
+
+startOver.on('click', startGame);
+
+//#endregion
+
+//#region Helpers
+
+function randomRange(min, max) {
+	if (max === undefined) {
+		return Math.floor(Math.random() * min);
+	} else {
+		return Math.floor(Math.random() * (max - min) + min);
+	}
+}
+
+function randomRangeFloat(min, max) {
+	if (max === undefined) {
+		return Math.random() * min;
+	} else {
+		return Math.random() * (max - min) + min;
+	}
+}
+
+function toDegrees(angle) {
+	return angle * 180 / Math.PI;
+}
+
+function toRadians(angle) {
+	return angle * Math.PI / 180;
+}
+
+//#endregion
+
 startGame('Romez1990');
 damage(90);
+// gameOver();
