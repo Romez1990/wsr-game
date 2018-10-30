@@ -653,7 +653,7 @@ function gameOver() {
 	let date = new Date();
 	
 	$.ajax({
-		url: '../php/table.php',
+		url: '../php/record.php',
 		method: 'POST',
 		data: {
 			username: $('#username').val(),
