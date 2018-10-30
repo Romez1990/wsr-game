@@ -110,6 +110,28 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+#app:after {
+  content: '';
+  width: 600px;
+  height: 600px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 2000px #8d8d8d;
+}
+
+#game {
+  transition: filter 0.5s linear;
+}
+
+.paused {
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+}
 
 #start {
   width: 320px;
@@ -124,6 +146,7 @@ body {
   transform: translate(-50%, -50%) scale(1.4);
   background: #333335;
   border-radius: 5px;
+  z-index: 1;
 }
 #start input {
   width: 75%;
@@ -291,6 +314,17 @@ main .explosion1 {
 }
 main .explosion2 {
   background-image: url("../img/explosion2.png");
+}
+
+#pause-screen {
+  width: 300px;
+  height: 170px;
+  background: #2b2c2e;
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /*# sourceMappingURL=style.css.map */

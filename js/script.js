@@ -1,5 +1,3 @@
-//TODO: Move all shortcuts to one function
-
 //#region Options
 
 let
@@ -22,7 +20,9 @@ input.select();
 let warning = $('#start p');
 let startButton = $('#start button');
 
-startButton.on('click', () => {
+startButton.on('click', startButtonClick);
+
+function startButtonClick() {
 	if (input.val().length === 0) {
 		showWarning('Fill in the name');
 		input.focus();
@@ -34,17 +34,9 @@ startButton.on('click', () => {
 		localStorage.setItem('name', val);
 		startGame(val);
 	}
-});
+}
 
-$(window).on('keydown', (e) => {
-	if (e.keyCode === 13) {
-		startButton.click();
-	}
-});
-
-input.on('keydown', () => {
-	hideWarning();
-});
+input.on('keydown', () => hideWarning());
 
 function showWarning(text) {
 	warning.fadeIn(300);
@@ -52,7 +44,19 @@ function showWarning(text) {
 }
 
 function hideWarning() {
+	if (warning.css('display') === 'none') return;
+	
 	warning.fadeOut(170);
+}
+
+$(document).on('keydown', startKeyDown);
+
+function startKeyDown(e) {
+	switch (e.keyCode) {
+		case 13: // Enter
+			startButtonClick();
+			break;
+	}
 }
 
 //#endregion
@@ -61,6 +65,7 @@ function hideWarning() {
 
 let app = $('#app');
 let player = $('#player');
+let gameIsActive = false;
 
 function startGame(name) {
 	$('#start').css('display', 'none');
@@ -69,16 +74,16 @@ function startGame(name) {
 	
 	setAllTimers();
 	
-	$(document).on('keydown', (e) => {
-		switch (e.keyCode) {
-			case 27:
-				stopAllTimers();
-				break;
-		}
-	});
+	gameIsActive = true;
 	
 	player.css('top', app.height() / 2 - player.height() / 2);
 	player.css('left', app.width() / 2 - player.width() / 2);
+	
+	$(document).off('keydown');
+	$(document).off('keyup');
+	
+	$(document).on('keydown', gameKeyDown);
+	$(document).on('keyup', gameKeyUp);
 }
 
 let timers = [];
@@ -88,6 +93,11 @@ function setAllTimers() {
 	timers.push(setInterval(createMeteor, 200));
 	timers.push(setInterval(removeMeteors, delay));
 	timers.push(setInterval(checkAllMeteorsToCollision, delay));
+	timers.push(setInterval(regenmp, 1000));
+	
+	meteors.forEach((meteor) => {
+		meteor.movementTimer = setInterval(meteor.meteorMovement, delay);
+	})
 }
 
 function stopAllTimers() {
@@ -96,6 +106,9 @@ function stopAllTimers() {
 		timers.splice(0, 1);
 	}
 	
+	meteors.forEach((meteor) => {
+		clearInterval(meteor.movementTimer);
+	});
 }
 
 let secondsPassed = 0;
@@ -124,58 +137,6 @@ let
 	left = false,
 	right = false
 ;
-
-$(document).on('keydown', (e) => {
-	if (up || down || left || right) return;
-	
-	switch (e.keyCode) {
-		case 38:
-		case 87:
-			up = true;
-			break;
-		
-		case 40:
-		case 83:
-			down = true;
-			break;
-		
-		case 37:
-		case 65:
-			left = true;
-			break;
-		
-		case 39:
-		case 68:
-			right = true;
-			break;
-	}
-	
-	move();
-});
-
-$(document).on('keyup', (e) => {
-	switch (e.keyCode) {
-		case 38:
-		case 87:
-			up = false;
-			break;
-		
-		case 40:
-		case 83:
-			down = false;
-			break;
-		
-		case 37:
-		case 65:
-			left = false;
-			break;
-		
-		case 39:
-		case 68:
-			right = false;
-			break;
-	}
-});
 
 function move() {
 	if (one) return;
@@ -409,18 +370,6 @@ let boost = {
 	mp: 15
 };
 
-$(document).on('keydown', (e) => {
-	switch (e.keyCode) {
-		case 49:
-			activateAbility(shield);
-			break;
-		
-		case 50:
-			activateAbility(boost);
-			break;
-	}
-});
-
 function activateAbility(ability) {
 	if (!ability.available) return;
 	
@@ -458,8 +407,6 @@ function removemp(removemp) {
 		return false;
 	}
 }
-
-setInterval(regenmp, 1000);
 
 function regenmp() {
 	if (mp.text() === '100') return;
@@ -587,6 +534,29 @@ function checkAllMeteorsToCollision() {
 
 //#endregion
 
+//#region Pause
+
+let isPause = false;
+let pauseScreen = $('#pause-screen');
+
+function pause() {
+	if (isPause) {
+		setAllTimers();
+		pauseScreen.fadeOut(500);
+	} else {
+		stopAllTimers();
+		pauseScreen.fadeIn(500);
+	}
+	
+	$('#game').toggleClass('paused');
+	
+	up = down = left = right = false;
+
+	isPause = !isPause;
+}
+
+//#endregion
+
 //#region Game over
 
 function gameOver() {
@@ -619,6 +589,80 @@ function toDegrees(angle) {
 
 function toRadians(angle) {
 	return angle * Math.PI / 180;
+}
+
+//#endregion
+
+//#region Key pressing
+
+function gameKeyDown(e) {
+	switch (e.keyCode) {
+		case 27: // Esc
+			pause();
+			break;
+	}
+	
+	if (isPause) return;
+	
+	switch (e.keyCode) {
+		case 49: // 1
+		case 97: // 1
+			activateAbility(shield);
+			break;
+		
+		case 50: // 2
+		case 98: // 2
+			activateAbility(boost);
+			break;
+	}
+	
+	if (up || down || left || right) return;
+	
+	switch (e.keyCode) {
+		case 38: // Up
+		case 87: // W
+			up = true;
+			move();
+			break;
+		case 40: // Down
+		case 83: // S
+			down = true;
+			move();
+			break;
+		case 37: // Left
+		case 65: // A
+			left = true;
+			move();
+			break;
+		case 39: // Right
+		case 68: // D
+			right = true;
+			move();
+			break;
+	}
+}
+
+function gameKeyUp(e) {
+	if (isPause) return;
+	
+	switch (e.keyCode) {
+		case 38: // Up
+		case 87: // W
+			up = false;
+			break;
+		case 40: // Down
+		case 83: // S
+			down = false;
+			break;
+		case 37: // Left
+		case 65: // A
+			left = false;
+			break;
+		case 39: // Right
+		case 68: // D
+			right = false;
+			break;
+	}
 }
 
 //#endregion
