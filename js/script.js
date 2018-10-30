@@ -65,7 +65,6 @@ function startKeyDown(e) {
 
 let app = $('#app');
 let player = $('#player');
-let gameIsActive = false;
 
 function startGame(name) {
 	$('#start').css('display', 'none');
@@ -73,8 +72,6 @@ function startGame(name) {
 	$('#game').css('display', 'block');
 	
 	setAllTimers();
-	
-	gameIsActive = true;
 	
 	player.css('top', app.height() / 2 - player.height() / 2);
 	player.css('left', app.width() / 2 - player.width() / 2);
@@ -454,8 +451,11 @@ function damage(damage) {
 		hp.css('width', newhp + '%');
 	} else {
 		hp.text(0);
-		setTimeout(() => hp.css('background', 'none'), 300);
-		gameOver();
+		hp.css('width', 0);
+		setTimeout(() => {
+			hp.css('background', 'none')
+			gameOver();
+		}, 270);
 	}
 }
 
@@ -538,6 +538,7 @@ function checkAllMeteorsToCollision() {
 
 let isPause = false;
 let pauseScreen = $('#pause-screen');
+let game = $('#game');
 
 function pause() {
 	if (isPause) {
@@ -548,10 +549,10 @@ function pause() {
 		pauseScreen.fadeIn(500);
 	}
 	
-	$('#game').toggleClass('paused');
+	game.toggleClass('paused');
 	
 	up = down = left = right = false;
-
+	
 	isPause = !isPause;
 }
 
@@ -559,8 +560,16 @@ function pause() {
 
 //#region Game over
 
+let table = $('#table');
+
 function gameOver() {
-	// stopAllTimers();
+	stopAllTimers();
+	up = down = left = right = false;
+	game.toggleClass('paused');
+	$(document).off('keydown');
+	$(document).off('keyup');
+	
+	table.fadeIn(250);
 }
 
 //#endregion
@@ -596,6 +605,8 @@ function toRadians(angle) {
 //#region Key pressing
 
 function gameKeyDown(e) {
+	console.log(1);
+	
 	switch (e.keyCode) {
 		case 27: // Esc
 			pause();
@@ -643,6 +654,8 @@ function gameKeyDown(e) {
 }
 
 function gameKeyUp(e) {
+	console.log(2);
+	
 	if (isPause) return;
 	
 	switch (e.keyCode) {
@@ -668,5 +681,4 @@ function gameKeyUp(e) {
 //#endregion
 
 startGame('Romez1990');
-
-// pause();
+damage(90);
