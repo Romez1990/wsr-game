@@ -3,8 +3,9 @@
 //#region Options
 
 let
+	timeScale = 1,
 	fps = 60,
-	delay = 1000 / fps,
+	delay = 1000 / (fps * timeScale),
 	playerSpeed = 150, // px/s
 	playerSpeedBoost = playerSpeed * 2.75, // px/s
 	meteorSpeed = 300 // px/s
@@ -58,6 +59,9 @@ function hideWarning() {
 
 //#region Game
 
+let app = $('#app');
+let player = $('#player');
+
 function startGame(name) {
 	$('#start').css('display', 'none');
 	$('#name').text(name);
@@ -72,6 +76,9 @@ function startGame(name) {
 				break;
 		}
 	});
+	
+	player.css('top', app.height() / 2 - player.height() / 2);
+	player.css('left', app.width() / 2 - player.width() / 2);
 }
 
 let timers = [];
@@ -108,8 +115,6 @@ function setTime() {
 //#endregion
 
 //#region Player movement
-
-let player = $('#player');
 
 let one = false;
 
@@ -178,17 +183,33 @@ function move() {
 	
 	let interval = setInterval(() => {
 		if (up) {
-			player.css('top', parseFloat(player.css('top')) - playerSpeed / fps);
-			player.css('transform', 'translate(-50%, -50%) rotate(0deg)');
+			player.css('transform', 'rotate(0deg)');
+			
+			let newTop = parseFloat(player.css('top')) - playerSpeed / fps;
+			if (newTop <= 0) return;
+			
+			player.css('top', newTop);
 		} else if (down) {
-			player.css('top', parseFloat(player.css('top')) + playerSpeed / fps);
-			player.css('transform', 'translate(-50%, -50%) rotate(180deg)');
+			player.css('transform', 'rotate(180deg)');
+			
+			let newTop = parseFloat(player.css('top')) + playerSpeed / fps;
+			if (newTop + player.height() >= app.height()) return;
+			
+			player.css('top', newTop);
 		} else if (left) {
-			player.css('left', parseFloat(player.css('left')) - playerSpeed / fps);
-			player.css('transform', 'translate(-50%, -50%) rotate(270deg)');
+			player.css('transform', 'rotate(270deg)');
+			
+			let newLeft = parseFloat(player.css('left')) - playerSpeed / fps;
+			if (newLeft <= 0) return;
+			
+			player.css('left', newLeft);
 		} else if (right) {
-			player.css('left', parseFloat(player.css('left')) + playerSpeed / fps);
-			player.css('transform', 'translate(-50%, -50%) rotate(90deg)');
+			player.css('transform', 'rotate(90deg)');
+			
+			let newLeft = parseFloat(player.css('left')) + playerSpeed / fps;
+			if (newLeft + player.width() >= app.width()) return;
+			
+			player.css('left', newLeft);
 		} else {
 			clearInterval(interval);
 			one = false;
@@ -201,7 +222,6 @@ function move() {
 //#region Meteors
 
 let meteors = [];
-let app = $('#app');
 
 // px takes from css
 let meteorTypes = [
@@ -240,7 +260,7 @@ function createMeteor() {
 			x = h * cos;
 			y = -height;
 			
-			y -= selectedMeteor.px / 2;
+			y -= selectedMeteor.px;
 			
 			direction = randomRangeFloat(180, 360);
 		} else if (sin < sinWin) {
@@ -249,16 +269,13 @@ function createMeteor() {
 			x = width;
 			y = -h * sin;
 			
-			x += selectedMeteor.px / 2;
-			
 			direction = randomRangeFloat(90, 270);
 		} else if (cos > 0) {
 			// console.log('Right-top');
 			x = width;
 			y = -height;
 			
-			x += selectedMeteor.px / 2;
-			y -= selectedMeteor.px / 2;
+			y -= selectedMeteor.px;
 			
 			direction = randomRangeFloat(180, 270);
 		} else if (cos < 0) {
@@ -266,8 +283,8 @@ function createMeteor() {
 			x = -width;
 			y = -height;
 			
-			x -= selectedMeteor.px / 2;
-			y -= selectedMeteor.px / 2;
+			x -= selectedMeteor.px;
+			y -= selectedMeteor.px;
 			
 			direction = randomRangeFloat(270, 360);
 		}
@@ -278,8 +295,6 @@ function createMeteor() {
 			x = -h * cos;
 			y = height;
 			
-			y += selectedMeteor.px / 2;
-			
 			direction = randomRangeFloat(0, 180);
 		} else if (Math.abs(Math.round(sin * 10000)) / 10000 < Math.abs(Math.round(sinWin * 10000) / 10000)) {
 			// console.log('Left');
@@ -287,7 +302,7 @@ function createMeteor() {
 			x = -width;
 			y = h * sin;
 			
-			x -= selectedMeteor.px / 2;
+			x -= selectedMeteor.px;
 			
 			direction = randomRange(2) === 0 ? randomRangeFloat(270, 360) : randomRangeFloat(90);
 		} else if (cos < 0) {
@@ -295,17 +310,13 @@ function createMeteor() {
 			x = -width;
 			y = height;
 			
-			x -= selectedMeteor.px / 2;
-			y += selectedMeteor.px / 2;
+			x -= selectedMeteor.px;
 			
 			direction = randomRangeFloat(0, 90);
 		} else {
 			// console.log('Right-bottom');
 			x = width;
 			y = height;
-			
-			x += selectedMeteor.px / 2;
-			y += selectedMeteor.px / 2;
 			
 			direction = randomRangeFloat(90, 180);
 		}
@@ -375,89 +386,22 @@ function removeMeteors() {
 
 //#endregion
 
-//#region Collision
-
-function collisionCheck(x1, y1, r1, x2, y2, r2) {
-	let dx = x1 - x2;
-	let dy = y1 - y2;
-	let distance = Math.sqrt(dx * dx + dy * dy);
-	if (distance < r1 + r2) {
-		return [(x1 + x2) / 2, (y1 + y2) / 2];
-	} else {
-		return false;
-	}
-}
-
-function checkAllMeteorsToCollision() {
-	meteors.forEach((meteor) => {
-		let r1 = player.width() / 2;
-		let x1 = parseInt(player.css('left'));
-		let y1 = parseInt(player.css('top'));
-		let r2 = meteor.dom.width() / 2;
-		let x2 = parseInt(meteor.dom.css('left'));
-		let y2 = parseInt(meteor.dom.css('top'));
-		let collision = collisionCheck(
-			x1, y1, r1,
-			x2, y2, r2
-		);
-		
-		if (collision === false) return;
-		
-		let damage;
-		if (meteor.dom.hasClass('small')) {
-			damage = 10;
-		} else if (meteor.dom.hasClass('medium')) {
-			damage = 20;
-		} else {
-			damage = 30;
-		}
-		
-		this.damage(damage);
-		
-		meteor.dom.detach();
-		let index = meteors.indexOf(meteor);
-		if (index !== -1) {
-			meteors.splice(index, 1);
-		}
-		clearInterval(meteor.movementTimer);
-		for (let key in meteor) {
-			delete meteor[key];
-		}
-		
-		let x = collision[0];
-		let y = collision[1];
-		
-		let explosion = $('<div class="explosion explosion1"></div>');
-		
-		explosion.css('left', x);
-		explosion.css('top', y);
-		
-		$('main').append(explosion);
-		
-		setTimeout(() => {
-			explosion.removeClass('explosion1');
-			explosion.addClass('explosion2');
-			setTimeout(() => explosion.detach(), 170)
-		}, 170);
-	});
-}
-
-//#endregion
-
 //#region Abilities
 
 let shield = {
 	dom: $('#shield .filling'),
-	bool: false,
+	available: true,
+	enable: false,
 	set: setShield,
 	remove: removeShield,
 	recharge: 10,
-	actionTime: 5,
+	actionTime: 50,
 	mp: 15
 };
 let boost = {
 	dom: $('#boost .filling'),
-	bool: false,
+	available: true,
+	enable: false,
 	set: setBoost,
 	remove: removeBoost,
 	recharge: 10,
@@ -478,9 +422,10 @@ $(document).on('keydown', (e) => {
 });
 
 function activateAbility(ability) {
-	if (ability.bool) return;
+	if (!ability.available) return;
 	
-	ability.bool = true;
+	ability.available = false;
+	ability.enable = true;
 	
 	ability.dom.css('transition', 'none');
 	ability.dom.css('top', 0);
@@ -492,11 +437,12 @@ function activateAbility(ability) {
 	if (!removemp(ability.mp)) return;
 	
 	setTimeout(() => {
-		ability.bool = false
+		ability.available = true;
 	}, ability.recharge * 1000);
 	
 	setTimeout(() => {
-		ability.remove()
+		ability.remove();
+		ability.enable = false;
 	}, ability.actionTime * 1000);
 }
 
@@ -524,7 +470,7 @@ function regenmp() {
 }
 
 setInterval(() => {
-	if (meteorSpeed > 4000) return;
+	if (meteorSpeed > 3000) return;
 	
 	meteorSpeed *= 1.5;
 }, 30000);
@@ -553,7 +499,7 @@ function removeBoost() {
 let hp = $('#hp p');
 
 function damage(damage) {
-	if (shield.bool) return;
+	if (shield.enable) return;
 	
 	let newhp = parseInt(hp.text()) - damage;
 	if (newhp > 0) {
@@ -564,6 +510,79 @@ function damage(damage) {
 		setTimeout(() => hp.css('background', 'none'), 300);
 		gameOver();
 	}
+}
+
+//#endregion
+
+//#region Collision
+
+function collisionCheck(x1, y1, r1, x2, y2, r2) {
+	let dx = x1 - x2;
+	let dy = y1 - y2;
+	let distance = Math.sqrt(dx * dx + dy * dy);
+	if (distance < r1 + r2) {
+		return [(x1 + x2) / 2, (y1 + y2) / 2];
+	} else {
+		return false;
+	}
+}
+
+function checkAllMeteorsToCollision() {
+	meteors.forEach((meteor) => {
+		let r1;
+		
+		if (!shield.enable) r1 = player.width() / 2;
+		else r1 = $('#shield-on').width() / 2;
+		
+		let x1 = parseInt(player.css('left')) + r1;
+		let y1 = parseInt(player.css('top')) + r1;
+		let r2 = meteor.dom.width() / 2;
+		let x2 = parseInt(meteor.dom.css('left')) + r2;
+		let y2 = parseInt(meteor.dom.css('top')) + r2;
+		let collision = collisionCheck(
+			x1, y1, r1,
+			x2, y2, r2
+		);
+		
+		if (collision === false) return;
+		
+		let damage;
+		if (meteor.dom.hasClass('small')) {
+			damage = 10;
+		} else if (meteor.dom.hasClass('medium')) {
+			damage = 20;
+		} else {
+			damage = 30;
+		}
+		
+		if (!shield.enable) this.damage(damage);
+		
+		meteor.dom.detach();
+		let index = meteors.indexOf(meteor);
+		if (index !== -1) {
+			meteors.splice(index, 1);
+		}
+		clearInterval(meteor.movementTimer);
+		for (let key in meteor) {
+			delete meteor[key];
+		}
+		
+		let x = collision[0];
+		let y = collision[1];
+		
+		let explosion = $('<div class="explosion explosion1"></div>');
+		
+		explosion.css('left', x);
+		explosion.css('top', y);
+		
+		$('main').append(explosion);
+		
+		setTimeout(() => {
+			explosion.removeClass('explosion1');
+			explosion.addClass('explosion2');
+			setTimeout(() => explosion.detach(), 170)
+		}, 170);
+	});
 }
 
 //#endregion
