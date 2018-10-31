@@ -17,8 +17,8 @@ body {
 $app-size: 100%;
 
 #app {
-	color: #dadada;
 	background: #1f2122;
+	color: #dadada;
 	//height: 100%;
 	width: $app-size;
 	height: $app-size;
@@ -39,16 +39,26 @@ $app-size: 100%;
 	}
 }
 
+#background {
+	background: url("../img/background/back.png") center;
+	background-size: cover;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
 #game {
 	transition: filter 0.5s linear;
 }
 
 .paused {
-	-webkit-filter: blur(5px);
-		-moz-filter: blur(5px);
-		  -o-filter: blur(5px);
-		 -ms-filter: blur(5px);
-			  filter: blur(5px);
+	-webkit-filter: blur(7px);
+		-moz-filter: blur(7px);
+		  -o-filter: blur(7px);
+		 -ms-filter: blur(7px);
+			  filter: blur(7px);
 }
 
 #start {
@@ -331,11 +341,28 @@ main {
 				width: 23%;
 			}
 		}
+		
+		td {
+			color: #909090;
+		}
+		
+		tr:nth-child(2) td {
+			color: gold;
+		}
+		
+		tr:nth-child(3) td {
+			color: silver;
+		}
+		
+		tr:nth-child(4) td {
+			color: #EC6A16;
+		}
 	}
 	
 	button {
 		display: block;
 		margin: 8px auto 18px;
 		padding: 8px 35px;
+		font-size: 20px;
 	}
 }

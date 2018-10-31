@@ -70,6 +70,7 @@ let secondsPassed = 0;
 
 let app = $('#app');
 let player = $('#player');
+let username = $('#username');
 
 function startGame(name) {
 	table.fadeOut(250);
@@ -83,7 +84,7 @@ function startGame(name) {
 	$('#time').text('00:00');
 	
 	$('#start').css('display', 'none');
-	$('#username').text(name);
+	username.text(name);
 	$('#game').css('display', 'block');
 	
 	setAllTimers();
@@ -650,22 +651,73 @@ function gameOver() {
 	$(document).off('keydown');
 	$(document).off('keyup');
 	
+	let name = username.text();
+	let score = secondsPassed;
 	let date = new Date();
+	let time = date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear().toString().substring(2, 4);
 	
-	$.ajax({
-		url: '../php/record.php',
-		method: 'POST',
-		data: {
-			username: $('#username').val(),
-			score: secondsPassed,
-			time: date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear().toString().substring(2,4)
-		},
-		success: (data) => {
-			JSON.parse(data);
-			
-			table.fadeIn(250);
+	/*
+		$.ajax({
+			url: '../php/record.php',
+			method: 'POST',
+			data: {
+				username: name,
+				score: score,
+				time: time
+			},
+			success: setTable
+		});
+	*/
+}
+
+function setTable(data) {
+	let topRecords = JSON.parse(data);
+	
+	console.log(topRecords);
+	
+	let previousRecord = null;
+	
+	let theSame = [];
+	
+	for (let i = 0; i < topRecords.length; i++) {
+		if (previousRecord !== null) {
+			if (topRecords[i].score === previousRecord.score) {
+				if (theSame.length === 0) {
+					theSame.push(i - 1);
+				}
+				theSame.push(i);
+			} else {
+				if (theSame.length !== 0) {
+					// Sorting by time
+					sort(topRecords, theSame[0], theSame[theSame.length - 1]);
+					
+					theSame = [];
+				}
+			}
 		}
-	});
+		
+		previousRecord = topRecords[i];
+	}
+	
+	table.fadeIn(250);
+}
+
+function sort(array, start, end) {
+	for (let i = start; i <= end; i++) {
+		let date = new Date(Date.parse(swapDayAndMonth(array[i].time)));
+		
+		
+		
+		console.log(date);
+	}
+}
+
+function swapDayAndMonth(date) {
+	let d = date.substring(0, 2);
+	let m = date.substring(3, 5);
+	let y = date.substring(6, 8);
+	
+	return m + '.' + d + '.' + y + '.';
 }
 
 //#endregion
@@ -707,5 +759,6 @@ function toRadians(angle) {
 //#endregion
 
 startGame('Romez1990');
-damage(90);
-// gameOver();
+// damage(90);
+gameOver();
+setTable('[{"username":"username","score":"1234","time":"31.10.18"},{"username":"username22","score":"555","time":"31.10.18"},{"username":"dfgs","score":"555","time":"18.10.18"},{"username":"dfgs","score":"555","time":"15.12.19"},{"username":"username22","score":"300","time":"31.10.18"},{"username":"any name","score":"300","time":"30.09.18"},{"username":"dfgs","score":"300","time":"01.11.18"},{"username":"dfgs","score":"300","time":"05.11.18"},{"username":"dfgs","score":"300","time":"03.11.18"},{"username":"username22","score":"99","time":"31.10.18"}]');
