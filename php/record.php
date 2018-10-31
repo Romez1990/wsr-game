@@ -9,7 +9,11 @@ if (!$conn) {
 	die("Database connection error\n" . mysqli_connect_error());
 }
 
-$query = mysqli_query($conn, "SELECT `username`, `score`, `time` FROM `record` ORDER BY `score` DESC LIMIT 10");
+$username = $_POST['username'];
+$score = $_POST['score'];
+$time = $_POST['time'];
+
+$query = mysqli_query($conn, "SELECT `username`, `score`, `time` FROM `record` WHERE `score` >= '$score' ORDER BY `score` DESC");
 
 $top_records = null;
 while ($record = mysqli_fetch_assoc($query)) {
@@ -18,9 +22,6 @@ while ($record = mysqli_fetch_assoc($query)) {
 
 echo json_encode($top_records);
 
-$username = $_POST['username'];
-$score = $_POST['score'];
-$time = $_POST['time'];
 
 //$username = 'username22';
 //$score = '1500';
