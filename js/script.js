@@ -72,6 +72,7 @@ let meteors = [];
 let app = $('#app');
 let player = $('#player');
 let username = $('#username');
+let usernameText;
 
 function startGame(name) {
 	// Removing
@@ -93,6 +94,7 @@ function startGame(name) {
 	
 	$('#start').css('display', 'none');
 	username.text(name);
+	usernameText = name;
 	$('#game').css('display', 'block');
 	
 	// Setting
@@ -106,6 +108,8 @@ function startGame(name) {
 	
 	$(document).on('keydown', gameKeyDown);
 	$(document).on('keyup', gameKeyUp);
+
+	// damage(90);
 }
 
 let timers = [];
@@ -651,8 +655,6 @@ function gameKeyUp(e) {
 
 //#region Game over
 
-let playersResults = {};
-
 function gameOver() {
 	stopAllTimers();
 	up = down = left = right = false;
@@ -660,18 +662,16 @@ function gameOver() {
 	$(document).off('keydown');
 	$(document).off('keyup');
 	
-	playersResults.name = username.text();
-	playersResults.score = secondsPassed;
 	let date = new Date();
-	playersResults.time = date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear().toString().substring(2, 4);
+	let time = date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear().toString().substring(2, 4);
 	
 	$.ajax({
-		url: '../php/record.php',
+		url: 'php/record.php',
 		method: 'POST',
 		data: {
-			username: playersResults.name,
-			score: playersResults.score,
-			time: playersResults.time
+			username: usernameText,
+			score: secondsPassed,
+			time: time
 		},
 		success: setTable
 	});
@@ -753,7 +753,7 @@ function swapDayAndMonth(date) {
 
 let startOver = $('#table-screen button');
 
-startOver.on('click', startGame);
+startOver.on('click', () => startGame(usernameText));
 
 //#endregion
 
@@ -785,7 +785,6 @@ function toRadians(angle) {
 
 //#endregion
 
-// startGame('Romez1990');
-// damage(90);
-// gameOver();
+startGame('Romez1990');
+gameOver();
 // setTable('[{"username":"username","score":"1234","time":"31.10.18"},{"username":"username22","score":"555","time":"31.10.18"},{"username":"dfgs","score":"555","time":"18.10.18"},{"username":"dfgs","score":"555","time":"15.12.19"},{"username":"username22","score":"300","time":"31.10.18"},{"username":"any name","score":"300","time":"30.09.18"},{"username":"dfgs","score":"300","time":"01.11.18"},{"username":"dfgs","score":"300","time":"05.11.18"},{"username":"dfgs","score":"300","time":"03.11.18"},{"username":"username22","score":"99","time":"31.10.18"}]');
