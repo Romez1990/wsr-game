@@ -63,7 +63,7 @@ function startKeyDown(e) {
 
 //#region Game
 
-let table = $('#table-screen');
+let tableScreen = $('#table-screen');
 let hp = $('#hp p');
 let mp = $('#mp p');
 let secondsPassed = 0;
@@ -76,7 +76,7 @@ let usernameText;
 
 function startGame(name) {
 	// Removing
-	table.fadeOut(250);
+	tableScreen.fadeOut(250);
 	for (let i = 0; i < meteors.length; i++) {
 		meteors[i].dom.detach();
 		clearInterval(meteors[i].movementTimer);
@@ -89,6 +89,7 @@ function startGame(name) {
 	mp.text(100);
 	mp.css('width', '100%');
 	secondsPassed = 0;
+	meteorSpeed = 300;
 	$('#time').text('00:00');
 	player.css('transform', 'rotate(0deg)');
 	
@@ -96,6 +97,12 @@ function startGame(name) {
 	username.text(name);
 	usernameText = name;
 	$('#game').css('display', 'block');
+	
+	meteors.forEach(meteor => {
+		meteor.dom.detach();
+		clearInterval(meteor.movementTimer);
+	});
+	meteors = [];
 	
 	// Setting
 	setAllTimers();
@@ -108,7 +115,7 @@ function startGame(name) {
 	
 	$(document).on('keydown', gameKeyDown);
 	$(document).on('keyup', gameKeyUp);
-
+	
 	// damage(90);
 }
 
@@ -377,8 +384,8 @@ let shield = {
 	enable: false,
 	set: setShield,
 	remove: removeShield,
-	recharge: 10,
-	actionTime: 50,
+	recharge: 15,
+	actionTime: 5,
 	mp: 15
 };
 let boost = {
@@ -387,7 +394,7 @@ let boost = {
 	enable: false,
 	set: setBoost,
 	remove: removeBoost,
-	recharge: 10,
+	recharge: 15,
 	actionTime: 5,
 	mp: 15
 };
@@ -662,89 +669,49 @@ function gameOver() {
 	$(document).off('keydown');
 	$(document).off('keyup');
 	
-	let date = new Date();
-	let time = date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear().toString().substring(2, 4);
-	
 	$.ajax({
 		url: 'php/record.php',
 		method: 'POST',
 		data: {
 			username: usernameText,
 			score: secondsPassed,
-			time: time
 		},
 		success: setTable
 	});
 }
 
 function setTable(data) {
+	console.log(data);
 	let topRecords = JSON.parse(data);
 	
-	let previousRecord = null;
+	tableScreen.fadeIn(250);
 	
-	let theSame = [];
+	let table = $('#table-screen table');
+	
+	table.empty();
+	
+	table.append('<tr><th>№</th><th>Username</th><th>Score</th><th>Time</th></tr>');
+	
+	let currentFound = false;
 	
 	for (let i = 0; i < topRecords.length; i++) {
-		if (previousRecord !== null) {
-			if (topRecords[i].score === previousRecord.score) {
-				if (theSame.length === 0) {
-					theSame.push(i - 1);
-				}
-				theSame.push(i);
-			} else {
-				if (theSame.length !== 0) {
-					// Sorting by time
-					topRecords = sort(topRecords, theSame[0], theSame[theSame.length - 1]);
-					
-					theSame = [];
-				}
-			}
+		let row = $('<tr></tr>');
+		
+		for (let key in topRecords[i]) {
+			row.append($('<td></td>').text(topRecords[i][key]));
 		}
 		
-		previousRecord = topRecords[i];
-	}
-	
-	table.fadeIn(250);
-	
-	let rows = $('#table-screen tr:not(:first-child)');
-	for (let i = 0; i < topRecords.length; i++) {
-		let cells = rows.eq(i).children();
-		cells.eq(1).text(topRecords[i].username);
-		cells.eq(2).text(topRecords[i].score);
-		cells.eq(3).text(topRecords[i].time);
-	}
-	
-	
-}
-
-function sort(arr, start, end) {
-	for (let i = start; i <= end; i++) {
-		for (let i = start; i <= end; i++) {
-			let maxIndex = i;
-			
-			for (let j = i + 1; j <= end; j++) {
-				let a = Date.parse(swapDayAndMonth(arr[maxIndex].time));
-				let b = Date.parse(swapDayAndMonth(arr[j].time));
-				if (a < b) {
-					maxIndex = j;
-				}
-			}
-			
-			if (maxIndex !== i) {
-				[arr[maxIndex], arr[i]] = [arr[i], arr[maxIndex]];
-			}
+		if (topRecords[i].username === usernameText && topRecords[i].score == secondsPassed && !currentFound) {
+			row.addClass('current');
+			currentFound = true;
 		}
+		
+		if (topRecords[i].place > 10) {
+			table.append('<tr>...</tr>');
+		}
+		
+		table.append(row);
 	}
-	
-	return arr;
-}
-
-function swapDayAndMonth(date) {
-	let d = date.substring(0, 2);
-	let m = date.substring(3, 5);
-	let y = date.substring(6, 8);
-	
-	return m + '.' + d + '.' + y;
 }
 
 //#endregion
@@ -785,6 +752,5 @@ function toRadians(angle) {
 
 //#endregion
 
-startGame('Romez1990');
-gameOver();
-// setTable('[{"username":"username","score":"1234","time":"31.10.18"},{"username":"username22","score":"555","time":"31.10.18"},{"username":"dfgs","score":"555","time":"18.10.18"},{"username":"dfgs","score":"555","time":"15.12.19"},{"username":"username22","score":"300","time":"31.10.18"},{"username":"any name","score":"300","time":"30.09.18"},{"username":"dfgs","score":"300","time":"01.11.18"},{"username":"dfgs","score":"300","time":"05.11.18"},{"username":"dfgs","score":"300","time":"03.11.18"},{"username":"username22","score":"99","time":"31.10.18"}]');
+// startGame('Romez1990');
+// gameOver();

@@ -19,7 +19,6 @@ $app-size: 100%;
 #app {
 	background: #1f2122;
 	color: #dadada;
-	//height: 100%;
 	width: $app-size;
 	height: $app-size;
 	position: absolute;
@@ -40,7 +39,7 @@ $app-size: 100%;
 }
 
 #background {
-	background: url("../img/background/back.png") center;
+	background: url("../img/background.png") center;
 	background-size: cover;
 	position: absolute;
 	top: 0;
@@ -55,10 +54,10 @@ $app-size: 100%;
 
 .paused {
 	-webkit-filter: blur(7px);
-		-moz-filter: blur(7px);
-		  -o-filter: blur(7px);
-		 -ms-filter: blur(7px);
-			  filter: blur(7px);
+	-moz-filter: blur(7px);
+	-o-filter: blur(7px);
+	-ms-filter: blur(7px);
+	filter: blur(7px);
 }
 
 #start {
@@ -104,7 +103,7 @@ $app-size: 100%;
 #ui {
 	position: absolute;
 	
-	#name {
+	#username {
 		position: absolute;
 		font: 24px/24px Loma;
 	}
@@ -319,10 +318,11 @@ main {
 		width: 100%;
 		box-sizing: border-box;
 		padding: 10px;
+		border-spacing: 0 3px;
 		
 		tr {
 			th:nth-child(1), td:nth-child(1) {
-				text-align: left;
+				text-align: center;
 				width: 10%;
 			}
 			
@@ -344,6 +344,7 @@ main {
 		
 		td {
 			color: #909090;
+			padding: 3px 0;
 		}
 		
 		tr:nth-child(2) td {
@@ -357,11 +358,15 @@ main {
 		tr:nth-child(4) td {
 			color: #EC6A16;
 		}
+		
+		.current {
+			background: rgba(255, 255, 255, 0.15);
+		}
 	}
 	
 	button {
 		display: block;
-		margin: 8px auto 18px;
+		margin: 0 auto 20px;
 		padding: 8px 35px;
 		font-size: 20px;
 	}
