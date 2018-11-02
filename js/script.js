@@ -681,7 +681,6 @@ function gameOver() {
 }
 
 function setTable(data) {
-	console.log(data);
 	let topRecords = JSON.parse(data);
 	
 	tableScreen.fadeIn(250);
@@ -702,12 +701,12 @@ function setTable(data) {
 		}
 		
 		if (topRecords[i].username === usernameText && topRecords[i].score == secondsPassed && !currentFound) {
-			row.addClass('current');
+			row.attr('id', 'current');
 			currentFound = true;
 		}
 		
 		if (topRecords[i].place > 10) {
-			table.append('<tr>...</tr>');
+			table.append($('<tr><td>...</td></tr>'));
 		}
 		
 		table.append(row);
@@ -752,5 +751,8 @@ function toRadians(angle) {
 
 //#endregion
 
+// Debug:
+
 // startGame('Romez1990');
+// secondsPassed = 1;
 // gameOver();

@@ -1,7 +1,7 @@
 <?php
 
-$conn = mysqli_connect('localhost', 'root', 'root', '2_module_spacex');
-//$conn = mysqli_connect('sql205.epizy.com', 'epiz_22796060', 'unmHAgSvVhx', 'epiz_22796060_SpaceX');
+//$conn = mysqli_connect('localhost', 'root', 'root', '2_module_spacex');
+$conn = mysqli_connect('sql205.epizy.com', 'epiz_22796060', 'unmHAgSvVhx', 'epiz_22796060_SpaceX');
 
 if (!$conn) {
 	die('Database connection error' . "\n" . mysqli_connect_error());
@@ -14,11 +14,11 @@ mysqli_query($conn, "INSERT INTO `record` (`username`, `score`) VALUE ('$usernam
 $id = mysqli_insert_id($conn);
 
 mysqli_query($conn, "SET @i = 0");
-$all_records = mysqli_query($conn, "SELECT (@i := @i + 1) AS `place`, `id`, `username`, `score`, `time` FROM `record` WHERE `score` >= '$score' ORDER BY `score` DESC, time DESC");
+$top_10_records = mysqli_query($conn, "SELECT (@i := @i + 1) AS `place`, `id`, `username`, `score`, `time` FROM `record` ORDER BY `score` DESC, time DESC LIMIT 10");
 
 $current_found = false;
 $top_records = null;
-for ($i = 0; $i < 10 && $record = mysqli_fetch_assoc($all_records); $i++) {
+for ($i = 0; $i < 10 && $record = mysqli_fetch_assoc($top_10_records); $i++) {
 	if ($record['id'] === $id) {
 		$current_found = true;
 	}
@@ -29,7 +29,9 @@ for ($i = 0; $i < 10 && $record = mysqli_fetch_assoc($all_records); $i++) {
 }
 
 if (!$current_found) {
-	while ($record = mysqli_fetch_assoc($all_records)) {
+	mysqli_query($conn, "SET @i = 10");
+	$remaining_records = mysqli_query($conn, "SELECT (@i := @i + 1) AS `place`, `id`, `username`, `score`, `time` FROM `record` WHERE `score` >= 0 ORDER BY `score` DESC, time DESC LIMIT 10, 18446744073709551615");
+	while ($record = mysqli_fetch_assoc($remaining_records)) {
 		if ($record['id'] != $id) continue;
 		
 		unset($record['id']);
