@@ -123,7 +123,7 @@ let timers = [];
 
 function setAllTimers() {
 	timers.push(setInterval(setTime, 1000));
-	timers.push(setInterval(createMeteor, 200));
+	timers.push(setInterval(createMeteor, 215));
 	timers.push(setInterval(removeMeteors, delay));
 	timers.push(setInterval(checkAllMeteorsToCollision, delay));
 	timers.push(setInterval(regenmp, 1000));
@@ -680,14 +680,22 @@ function gameOver() {
 	});
 }
 
+let tableWrapper = $('#table-wrapper');
+
 function setTable(data) {
-	let topRecords = JSON.parse(data);
-	
 	tableScreen.fadeIn(250);
 	
-	let table = $('#table-screen table');
+	let topRecords;
+	try {
+		topRecords = JSON.parse(data);
+	} catch {
+		tableWrapper.append('<p>An error occurred while displaying the results</p>');
+		return;
+	}
 	
-	table.empty();
+	let table = $('<table></table>');
+	tableWrapper.empty();
+	tableWrapper.append(table);
 	
 	table.append('<tr><th>№</th><th>Username</th><th>Score</th><th>Time</th></tr>');
 	
@@ -748,6 +756,27 @@ function toDegrees(angle) {
 function toRadians(angle) {
 	return angle * Math.PI / 180;
 }
+
+//#endregion
+
+//#region Adaptivity
+
+let gameWidth = 933;
+let gameHeight = 700;
+
+function adapt() {
+	let width = $(window).width();
+	let height = $(window).height();
+	
+	if (width / height < gameWidth / gameHeight) {
+		app.css('transform', 'translate(-50%, -50%) scale(' + width / gameWidth + ')');
+	} else {
+		app.css('transform', 'translate(-50%, -50%) scale(' + height / gameHeight + ')');
+	}
+}
+
+$(window).on('resize', adapt);
+adapt();
 
 //#endregion
 
