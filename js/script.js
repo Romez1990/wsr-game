@@ -84,8 +84,10 @@ function startGame(name) {
 	}
 	game.removeClass('paused');
 	hp.text(100);
-	hp.css('width', '100%');
-	hp.css('background', 'red');
+	hp.css({
+		'width': '100%',
+		'background': 'red'
+	});
 	mp.text(100);
 	mp.css('width', '100%');
 	secondsPassed = 0;
@@ -107,11 +109,12 @@ function startGame(name) {
 	// Setting
 	setAllTimers();
 	
-	player.css('top', app.height() / 2 - player.height() / 2);
-	player.css('left', app.width() / 2 - player.width() / 2);
+	player.css({
+		'top': app.height() / 2 - player.height() / 2,
+		'left': app.width() / 2 - player.width() / 2
+	});
 	
-	$(document).off('keydown');
-	$(document).off('keyup');
+	$(document).off('keydown keyup');
 	
 	$(document).on('keydown', gameKeyDown);
 	$(document).on('keyup', gameKeyUp);
@@ -318,8 +321,10 @@ function createMeteor() {
 		dom: $(`<div class="meteor ${size}"></div>`)
 	};
 	
-	meteor.dom.css('left', app.width() / 2 + x);
-	meteor.dom.css('top', app.height() / 2 + y);
+	meteor.dom.css({
+		'left': app.width() / 2 + x,
+		'top': app.height() / 2 + y
+	});
 	
 	$('#meteors').append(meteor.dom);
 	
@@ -339,8 +344,10 @@ function createMeteor() {
 		let x = meteorSpeed / fps * cos;
 		let sin = Math.sin(toRadians(meteor.direction));
 		let y = -meteorSpeed / fps * sin;
-		meteor.dom.css('top', parseFloat(meteor.dom.css('top')) + y);
-		meteor.dom.css('left', parseFloat(meteor.dom.css('left')) + x);
+		meteor.dom.css({
+			'top': parseFloat(meteor.dom.css('top')) + y,
+			'left': parseFloat(meteor.dom.css('left')) + x
+		});
 		
 		meteor.currentAngle += meteor.angle;
 		
@@ -356,16 +363,13 @@ function createMeteor() {
 
 function removeMeteors() {
 	for (let i = 0; i < meteors.length; i++) {
-		let left = parseInt(meteors[i].dom.css('left'));
-		let top = parseInt(meteors[i].dom.css('top'));
-		let right = parseInt(meteors[i].dom.css('right'));
-		let bottom = parseInt(meteors[i].dom.css('bottom'));
+		let meteorPosition = meteors[i].dom.css(['left', 'top', 'right', 'bottom']);
 		
 		if (
-			right + meteors[i].dom.width() + 5 < 0 ||
-			bottom + meteors[i].dom.width() + 5 < 0 ||
-			left + meteors[i].dom.width() + 5 < 0 ||
-			top + meteors[i].dom.width() + 5 < 0
+			parseInt(meteorPosition.right) + meteors[i].dom.width() + 5 < 0 ||
+			parseInt(meteorPosition.bottom) + meteors[i].dom.width() + 5 < 0 ||
+			parseInt(meteorPosition.left) + meteors[i].dom.width() + 5 < 0 ||
+			parseInt(meteorPosition.top) + meteors[i].dom.width() + 5 < 0
 		) {
 			meteors[i].dom.detach();
 			clearInterval(meteors[i].movementTimer);
@@ -405,8 +409,10 @@ function activateAbility(ability) {
 	ability.available = false;
 	ability.enable = true;
 	
-	ability.dom.css('transition', 'none');
-	ability.dom.css('top', 0);
+	ability.dom.css({
+		'transition': 'none',
+		'top': 0
+	});
 	setTimeout(() => ability.dom.css('transition', `top ${ability.recharge}s linear`), 1);
 	setTimeout(() => ability.dom.css('top', 100 + '%'), 1);
 	
@@ -547,8 +553,10 @@ function checkAllMeteorsToCollision() {
 		
 		let explosion = $('<div class="explosion explosion1"></div>');
 		
-		explosion.css('left', x);
-		explosion.css('top', y);
+		explosion.css({
+			'left': x,
+			'top': y
+		});
 		
 		$('main').append(explosion);
 		
@@ -666,8 +674,7 @@ function gameOver() {
 	stopAllTimers();
 	up = down = left = right = false;
 	game.toggleClass('paused');
-	$(document).off('keydown');
-	$(document).off('keyup');
+	$(document).off('keydown keyup');
 	
 	$.ajax({
 		url: 'php/record.php',
