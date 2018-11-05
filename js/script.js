@@ -116,8 +116,10 @@ function startGame(name) {
 	
 	$(document).off('keydown keyup');
 	
-	$(document).on('keydown', gameKeyDown);
-	$(document).on('keyup', gameKeyUp);
+	$(document).on({
+		keydown: gameKeyDown,
+		keyup: gameKeyUp
+	});
 	
 	// damage(90);
 }
@@ -692,6 +694,8 @@ let tableWrapper = $('#table-wrapper');
 function setTable(data) {
 	tableScreen.fadeIn(250);
 	
+	tableWrapper.empty();
+	
 	let topRecords;
 	try {
 		topRecords = JSON.parse(data);
@@ -701,7 +705,6 @@ function setTable(data) {
 	}
 	
 	let table = $('<table></table>');
-	tableWrapper.empty();
 	tableWrapper.append(table);
 	
 	table.append('<tr><th>№</th><th>Username</th><th>Score</th><th>Time</th></tr>');
@@ -727,10 +730,6 @@ function setTable(data) {
 		table.append(row);
 	}
 }
-
-//#endregion
-
-//#region Table
 
 let startOver = $('#table-screen button');
 
