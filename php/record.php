@@ -1,7 +1,6 @@
 <?php
 
 $conn = mysqli_connect('localhost', 'root', 'root', '2_module_spacex');
-//$conn = mysqli_connect('sql205.epizy.com', 'epiz_22796060', 'unmHAgSvVhx', 'epiz_22796060_SpaceX');
 
 if (!$conn) {
 	die('Database connection error' . "\n" . mysqli_connect_error());
