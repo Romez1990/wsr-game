@@ -737,7 +737,7 @@ startOver.on('click', () => startGame(usernameText));
 
 //#endregion
 
-//#region Helpers
+//#region Functions
 
 function randomRange(min, max) {
 	if (max === undefined) {
