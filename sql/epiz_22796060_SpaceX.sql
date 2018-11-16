@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: sql205.epizy.com
--- Generation Time: Nov 02, 2018 at 01:19 PM
+-- Generation Time: Nov 16, 2018 at 09:59 AM
 -- Server version: 5.6.41-84.1
 -- PHP Version: 5.3.3
 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `record` (
   PRIMARY KEY (`id`),
   KEY `score` (`score`),
   KEY `date` (`time`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=20 ;
 
 --
 -- Dumping data for table `record`
@@ -56,7 +56,10 @@ INSERT INTO `record` (`id`, `username`, `score`, `time`) VALUES
 (13, 'Karina', 91, '2018-11-02 08:35:30'),
 (14, 'Karina', 33, '2018-11-02 08:36:18'),
 (15, 'Karina', 116, '2018-11-02 08:38:25'),
-(16, 'OLesya', 42, '2018-11-02 09:53:39');
+(16, 'OLesya', 42, '2018-11-02 09:53:39'),
+(17, 'Romez1990', 25, '2018-11-03 01:09:15'),
+(18, 'roma1337 2228', 23, '2018-11-06 07:23:50'),
+(19, '4ekatilo', 25, '2018-11-06 07:24:09');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

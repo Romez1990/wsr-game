@@ -1,10 +1,6 @@
 <?php
 
-$conn = mysqli_connect('localhost', 'root', 'root', '2_module_spacex');
-
-if (!$conn) {
-	die('Database connection error' . "\n" . mysqli_connect_error());
-}
+$conn = mysqli_connect('127.0.0.1', 'root', '', '2_module_spacex');
 
 $username = $_POST['username'];
 $score = $_POST['score'];
