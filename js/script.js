@@ -681,6 +681,7 @@ function gameOver() {
 	$.ajax({
 		url: 'php/record.php',
 		method: 'POST',
+		dataType: 'json',
 		data: {
 			username: usernameText,
 			score: secondsPassed,
@@ -691,17 +692,22 @@ function gameOver() {
 
 let tableWrapper = $('#table-wrapper');
 
-function setTable(data) {
+function setTable(json) {
 	tableScreen.fadeIn(250);
 	
 	tableWrapper.empty();
 	
 	let topRecords;
 	try {
-		topRecords = JSON.parse(data);
+		topRecords = JSON.parse(json);
 	} catch {
-		tableWrapper.append('<p>An error occurred while displaying the results</p>');
-		return;
+		if (typeof json === 'object') {
+			console.log('Object was received');
+			topRecords = json;
+		} else {
+			tableWrapper.append('<p>An error occurred while displaying the results</p>');
+			return;
+		}
 	}
 	
 	let table = $('<table></table>');
