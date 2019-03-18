@@ -1,12 +1,12 @@
 //#region Options
 
 let
-	timeScale = 1,
-	fps = 60,
-	delay = 1000 / (fps * timeScale),
-	playerSpeed = 150, // px/s
+	timeScale        = 1,
+	fps              = 60,
+	delay            = 1000 / (fps * timeScale),
+	playerSpeed      = 150, // px/s
 	playerSpeedBoost = playerSpeed * 2.75, // px/s
-	meteorSpeed = 300 // px/s
+	meteorSpeed      = 300 // px/s
 ;
 
 //#endregion
@@ -17,7 +17,7 @@ let input = $('#start input');
 
 input.val(localStorage.getItem('name'));
 input.select();
-let warning = $('#start p');
+let warning     = $('#start p');
 let startButton = $('#start button');
 
 startButton.on('click', startButtonClick);
@@ -63,14 +63,14 @@ function startKeyDown(e) {
 
 //#region Game
 
-let tableScreen = $('#table-screen');
-let hp = $('#hp p');
-let mp = $('#mp p');
+let tableScreen   = $('#table-screen');
+let hp            = $('#hp p');
+let mp            = $('#mp p');
 let secondsPassed = 0;
-let meteors = [];
+let meteors       = [];
 
-let app = $('#app');
-let player = $('#player');
+let app      = $('#app');
+let player   = $('#player');
 let username = $('#username');
 let usernameText;
 
@@ -85,13 +85,13 @@ function startGame(name) {
 	game.removeClass('paused');
 	hp.text(100);
 	hp.css({
-		'width': '100%',
+		'width':      '100%',
 		'background': 'red'
 	});
 	mp.text(100);
 	mp.css('width', '100%');
 	secondsPassed = 0;
-	meteorSpeed = 300;
+	meteorSpeed   = 300;
 	$('#time').text('00:00');
 	player.css('transform', 'rotate(0deg)');
 	
@@ -110,7 +110,7 @@ function startGame(name) {
 	setAllTimers();
 	
 	player.css({
-		'top': app.height() / 2 - player.height() / 2,
+		'top':  app.height() / 2 - player.height() / 2,
 		'left': app.width() / 2 - player.width() / 2
 	});
 	
@@ -118,7 +118,7 @@ function startGame(name) {
 	
 	$(document).on({
 		keydown: gameKeyDown,
-		keyup: gameKeyUp
+		keyup:   gameKeyUp
 	});
 	
 	// damage(90);
@@ -168,9 +168,9 @@ function setTime() {
 let one = false;
 
 let
-	up = false,
-	down = false,
-	left = false,
+	up    = false,
+	down  = false,
+	left  = false,
 	right = false
 ;
 
@@ -220,9 +220,9 @@ function move() {
 
 // px takes from css
 let meteorTypes = [
-	{size: 'small', px: 30},
-	{size: 'medium', px: 50},
-	{size: 'large', px: 90}
+	{ size: 'small', px: 30 },
+	{ size: 'medium', px: 50 },
+	{ size: 'large', px: 90 }
 ];
 
 function createMeteor() {
@@ -240,9 +240,9 @@ function createMeteor() {
 	// Hypotenuse of window
 	let hypotenuse = Math.pow(Math.pow(width, 2) + Math.pow(height, 2), 0.5);
 	
-	let sin = Math.sin(angle);
+	let sin    = Math.sin(angle);
 	let sinWin = height / hypotenuse;
-	let cos = Math.cos(angle);
+	let cos    = Math.cos(angle);
 	
 	let x, y, direction;
 	
@@ -252,8 +252,8 @@ function createMeteor() {
 		if (Math.round(sin * 10000) / 10000 > Math.round(sinWin * 10000) / 10000) {
 			// console.log('Top');
 			let h = height / sin;
-			x = h * cos;
-			y = -height;
+			x     = h * cos;
+			y     = -height;
 			
 			y -= selectedMeteor.px;
 			
@@ -261,8 +261,8 @@ function createMeteor() {
 		} else if (sin < sinWin) {
 			// console.log('Right');
 			let h = width / cos;
-			x = width;
-			y = -h * sin;
+			x     = width;
+			y     = -h * sin;
 			
 			direction = randomRangeFloat(90, 270);
 		} else if (cos > 0) {
@@ -287,15 +287,15 @@ function createMeteor() {
 		if (Math.abs(Math.round(sin * 10000)) / 10000 > Math.round(sinWin * 10000) / 10000) {
 			// console.log('Bottom');
 			let h = height / sin;
-			x = -h * cos;
-			y = height;
+			x     = -h * cos;
+			y     = height;
 			
 			direction = randomRangeFloat(0, 180);
 		} else if (Math.abs(Math.round(sin * 10000)) / 10000 < Math.abs(Math.round(sinWin * 10000) / 10000)) {
 			// console.log('Left');
 			let h = width / cos;
-			x = -width;
-			y = h * sin;
+			x     = -width;
+			y     = h * sin;
 			
 			x -= selectedMeteor.px;
 			
@@ -320,12 +320,12 @@ function createMeteor() {
 	let size = selectedMeteor.size;
 	
 	let meteor = {
-		dom: $(`<div class="meteor ${size}"></div>`)
+		dom: $(`<div class="meteor ${ size }"></div>`)
 	};
 	
 	meteor.dom.css({
 		'left': app.width() / 2 + x,
-		'top': app.height() / 2 + y
+		'top':  app.height() / 2 + y
 	});
 	
 	$('#meteors').append(meteor.dom);
@@ -334,26 +334,26 @@ function createMeteor() {
 	
 	//#region Rotation
 	
-	let angle2 = randomRangeFloat(1, 7);
-	angle2 = randomRange(2) === 0 ? angle2 : -angle2;
+	let angle2        = randomRangeFloat(1, 7);
+	angle2            = randomRange(2) === 0 ? angle2 : -angle2;
 	let currentangle2 = 0;
 	
-	meteor.direction = direction;
-	meteor.currentAngle = currentangle2;
-	meteor.angle = angle2;
+	meteor.direction      = direction;
+	meteor.currentAngle   = currentangle2;
+	meteor.angle          = angle2;
 	meteor.meteorMovement = () => {
 		let cos = Math.cos(toRadians(meteor.direction));
-		let x = meteorSpeed / fps * cos;
+		let x   = meteorSpeed / fps * cos;
 		let sin = Math.sin(toRadians(meteor.direction));
-		let y = -meteorSpeed / fps * sin;
+		let y   = -meteorSpeed / fps * sin;
 		meteor.dom.css({
-			'top': parseFloat(meteor.dom.css('top')) + y,
+			'top':  parseFloat(meteor.dom.css('top')) + y,
 			'left': parseFloat(meteor.dom.css('left')) + x
 		});
 		
 		meteor.currentAngle += meteor.angle;
 		
-		meteor.dom.css('transform', `translate(-50%, -50%) rotate(${meteor.currentAngle}deg)`)
+		meteor.dom.css('transform', `translate(-50%, -50%) rotate(${ meteor.currentAngle }deg)`)
 	};
 	
 	meteor.movementTimer = setInterval(meteor.meteorMovement, delay);
@@ -385,37 +385,37 @@ function removeMeteors() {
 //#region Abilities
 
 let shield = {
-	dom: $('#shield .filling'),
-	available: true,
-	enable: false,
-	set: setShield,
-	remove: removeShield,
-	recharge: 15,
+	dom:        $('#shield .filling'),
+	available:  true,
+	enable:     false,
+	set:        setShield,
+	remove:     removeShield,
+	recharge:   15,
 	actionTime: 5,
-	mp: 15
+	mp:         15
 };
-let boost = {
-	dom: $('#boost .filling'),
-	available: true,
-	enable: false,
-	set: setBoost,
-	remove: removeBoost,
-	recharge: 15,
+let boost  = {
+	dom:        $('#boost .filling'),
+	available:  true,
+	enable:     false,
+	set:        setBoost,
+	remove:     removeBoost,
+	recharge:   15,
 	actionTime: 5,
-	mp: 15
+	mp:         15
 };
 
 function activateAbility(ability) {
 	if (!ability.available) return;
 	
 	ability.available = false;
-	ability.enable = true;
+	ability.enable    = true;
 	
 	ability.dom.css({
 		'transition': 'none',
-		'top': 0
+		'top':        0
 	});
-	setTimeout(() => ability.dom.css('transition', `top ${ability.recharge}s linear`), 1);
+	setTimeout(() => ability.dom.css('transition', `top ${ ability.recharge }s linear`), 1);
 	setTimeout(() => ability.dom.css('top', 100 + '%'), 1);
 	
 	ability.set();
@@ -500,8 +500,8 @@ function damage(damage) {
 //#region Collision
 
 function collisionCheck(x1, y1, r1, x2, y2, r2) {
-	let dx = x1 - x2;
-	let dy = y1 - y2;
+	let dx       = x1 - x2;
+	let dy       = y1 - y2;
 	let distance = Math.sqrt(dx * dx + dy * dy);
 	if (distance < r1 + r2) {
 		return [(x1 + x2) / 2, (y1 + y2) / 2];
@@ -517,11 +517,11 @@ function checkAllMeteorsToCollision() {
 		if (!shield.enable) r1 = player.width() / 2;
 		else r1 = $('#shield-on').width() / 2;
 		
-		let x1 = parseInt(player.css('left')) + r1;
-		let y1 = parseInt(player.css('top')) + r1;
-		let r2 = meteor.dom.width() / 2;
-		let x2 = parseInt(meteor.dom.css('left')) + r2;
-		let y2 = parseInt(meteor.dom.css('top')) + r2;
+		let x1        = parseInt(player.css('left')) + r1;
+		let y1        = parseInt(player.css('top')) + r1;
+		let r2        = meteor.dom.width() / 2;
+		let x2        = parseInt(meteor.dom.css('left')) + r2;
+		let y2        = parseInt(meteor.dom.css('top')) + r2;
 		let collision = collisionCheck(
 			x1, y1, r1,
 			x2, y2, r2
@@ -557,7 +557,7 @@ function checkAllMeteorsToCollision() {
 		
 		explosion.css({
 			'left': x,
-			'top': y
+			'top':  y
 		});
 		
 		$('main').append(explosion);
@@ -574,9 +574,9 @@ function checkAllMeteorsToCollision() {
 
 //#region Pause
 
-let isPause = false;
+let isPause     = false;
 let pauseScreen = $('#pause-screen');
-let game = $('#game');
+let game        = $('#game');
 
 function pause() {
 	if (isPause) {
@@ -672,6 +672,8 @@ function gameKeyUp(e) {
 
 //#region Game over
 
+let tableWrapper = $('#table-wrapper');
+
 function gameOver() {
 	stopAllTimers();
 	up = down = left = right = false;
@@ -679,57 +681,64 @@ function gameOver() {
 	$(document).off('keydown keyup');
 	
 	$.ajax({
-		url: 'php/record.php',
-		method: 'POST',
+		url:      'php/scoreboard.php',
+		method:   'POST',
 		dataType: 'json',
-		data: {
+		data:     {
 			username: usernameText,
-			score: secondsPassed,
+			score:    secondsPassed
 		},
-		success: setTable
+		success:  setTable,
+		error:    error => {
+			console.log(error);
+			
+			tableScreen.fadeIn(250);
+			
+			tableWrapper.empty();
+			
+			let table = $('<table></table>');
+			tableWrapper.append(table);
+			
+			table.append('<tr><th>№</th><th>Nickname</th><th>Score</th><th>Datetime</th></tr>');
+			
+			let row = $('<tr></tr>');
+			row.append($('<td></td>').text(1));
+			row.append($('<td></td>').text(usernameText));
+			row.append($('<td></td>').text(secondsPassed));
+			row.append($('<td></td>').text(new Date()));
+			row.attr('id', 'current');
+			table.append(row);
+			table.append($('<tr>An error has occurred while displaying the results</tr>'));
+		}
 	});
 }
 
-let tableWrapper = $('#table-wrapper');
-
-function setTable(json) {
+function setTable(topRecords) {
 	tableScreen.fadeIn(250);
 	
 	tableWrapper.empty();
 	
-	let topRecords;
-	try {
-		topRecords = JSON.parse(json);
-	} catch {
-		if (typeof json === 'object') {
-			console.log('Object was received');
-			topRecords = json;
-		} else {
-			tableWrapper.append('<p>An error occurred while displaying the results</p>');
-			return;
-		}
-	}
-	
 	let table = $('<table></table>');
 	tableWrapper.append(table);
 	
-	table.append('<tr><th>№</th><th>Username</th><th>Score</th><th>Time</th></tr>');
+	table.append('<tr><th>№</th><th>Nickname</th><th>Score</th><th>Datetime</th></tr>');
 	
 	let currentFound = false;
-	
 	for (let i = 0; i < topRecords.length; i++) {
 		let row = $('<tr></tr>');
 		
-		for (let key in topRecords[i]) {
-			row.append($('<td></td>').text(topRecords[i][key]));
-		}
+		row.append($('<td></td>').text(topRecords[i]['position']));
+		row.append($('<td></td>').text(topRecords[i]['nickname']));
+		row.append($('<td></td>').text(topRecords[i]['score']));
+		const date = new Date((parseInt(topRecords[i]['datetime']) - new Date().getTimezoneOffset() * 60) * 1000);
+		row.append($('<td></td>').text(date.toLocaleDateString(undefined, { day: '2-digit' }) + '-' + date.toLocaleDateString(undefined, { month: '2-digit' }) + '-' + date.toLocaleDateString(undefined, { year: '2-digit' })));
 		
 		if (topRecords[i].username === usernameText && topRecords[i].score == secondsPassed && !currentFound) {
 			row.attr('id', 'current');
 			currentFound = true;
 		}
 		
-		if (topRecords[i].place > 10) {
+		if (topRecords[i].position > 10) {
 			table.append($('<tr><td>...</td></tr>'));
 		}
 		
@@ -773,11 +782,11 @@ function toRadians(angle) {
 
 //#region Adaptivity
 
-let gameWidth = 933;
+let gameWidth  = 933;
 let gameHeight = 700;
 
 function adapt() {
-	let width = $(window).width();
+	let width  = $(window).width();
 	let height = $(window).height();
 	
 	if (width / height < gameWidth / gameHeight) {
