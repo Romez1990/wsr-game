@@ -150,14 +150,11 @@ function stopAllTimers() {
 }
 
 function setTime() {
-	secondsPassed++;
-	
+	++secondsPassed;
 	let second = secondsPassed % 60;
 	let minute = (secondsPassed - second) / 60;
-	
-	minute = minute < 10 ? '0' + minute : minute;
-	second = second < 10 ? '0' + second : second;
-	
+	second = second.toString().padStart(2, '0');
+	minute = minute.toString().padStart(2, '0');
 	$('#time').text(minute + ':' + second);
 }
 
