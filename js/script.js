@@ -686,27 +686,7 @@ function gameOver() {
             score: secondsPassed
         },
         success: setTable,
-        error: error => {
-            console.log(error);
-
-            tableScreen.fadeIn(250);
-
-            tableWrapper.empty();
-
-            let table = $('<table></table>');
-            tableWrapper.append(table);
-
-            table.append('<tr><th>№</th><th>Nickname</th><th>Score</th><th>Datetime</th></tr>');
-
-            let row = $('<tr></tr>');
-            row.append($('<td></td>').text(1));
-            row.append($('<td></td>').text(playerNameText));
-            row.append($('<td></td>').text(secondsPassed));
-            row.append($('<td></td>').text(new Date()));
-            row.attr('id', 'current');
-            table.append(row);
-            table.append($('<tr>An error has occurred while displaying the results</tr>'));
-        }
+        error: setErrorTable
     });
 }
 
@@ -720,19 +700,17 @@ function setTable(topRecords) {
 
     table.append('<tr><th>№</th><th>Player name</th><th>Score</th><th>Date</th></tr>');
 
-    let currentFound = false;
     for (let i = 0; i < topRecords.length; i++) {
         let row = $('<tr></tr>');
 
         row.append($('<td></td>').text(topRecords[i]['position']));
-        row.append($('<td></td>').text(topRecords[i]['nickname']));
+        row.append($('<td></td>').text(topRecords[i]['player_name']));
         row.append($('<td></td>').text(topRecords[i]['score']));
-        const date = new Date((parseInt(topRecords[i]['datetime']) - new Date().getTimezoneOffset() * 60) * 1000);
-        row.append($('<td></td>').text(date.toLocaleDateString(undefined, {day: '2-digit'}) + '-' + date.toLocaleDateString(undefined, {month: '2-digit'}) + '-' + date.toLocaleDateString(undefined, {year: '2-digit'})));
+        const date = new Date((topRecords[i]['datetime'] - new Date().getTimezoneOffset() * 60) * 1000);
+        row.append($('<td></td>').text(formatDate(date)));
 
-        if (topRecords[i].playerName === playerNameText && topRecords[i].score == secondsPassed && !currentFound) {
+        if (topRecords[i]['current_player']) {
             row.attr('id', 'current');
-            currentFound = true;
         }
 
         if (topRecords[i].position > 10) {
@@ -741,6 +719,36 @@ function setTable(topRecords) {
 
         table.append(row);
     }
+}
+
+function setErrorTable(error) {
+    console.log(error);
+
+    tableScreen.fadeIn(250);
+
+    tableWrapper.empty();
+
+    let table = $('<table></table>');
+    tableWrapper.append(table);
+
+    table.append('<tr><th>№</th><th>Player name</th><th>Score</th><th>Date</th></tr>');
+
+    let row = $('<tr></tr>');
+    row.append($('<td></td>').text(1));
+    row.append($('<td></td>').text(playerNameText));
+    row.append($('<td></td>').text(secondsPassed));
+    const date = new Date();
+    row.append($('<td></td>').text(formatDate(date)));
+    row.attr('id', 'current');
+    table.append(row);
+    table.append($('<tr>An error has occurred while displaying the results</tr>'));
+}
+
+function formatDate(date) {
+    const day = date.toLocaleDateString(undefined, { day: '2-digit' });
+    const month = date.toLocaleDateString(undefined, { month: '2-digit' });
+    const year = date.toLocaleDateString(undefined, { year: '2-digit' });
+    return `${year}-${month}-${day}`;
 }
 
 let startOver = $('#table-screen button');
