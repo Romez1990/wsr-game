@@ -745,10 +745,7 @@ function setErrorTable(error) {
 }
 
 function formatDate(date) {
-    const day = date.toLocaleDateString(undefined, { day: '2-digit' });
-    const month = date.toLocaleDateString(undefined, { month: '2-digit' });
-    const year = date.toLocaleDateString(undefined, { year: '2-digit' });
-    return `${year}-${month}-${day}`;
+    return date.toLocaleDateString();
 }
 
 let startOver = $('#table-screen button');
