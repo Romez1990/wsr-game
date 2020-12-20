@@ -71,8 +71,8 @@ let meteors = [];
 
 let app = $('#app');
 let player = $('#player');
-let username = $('#username');
-let usernameText;
+let playerName = $('#player_name');
+let playerNameText;
 
 function startGame(name) {
     // Removing
@@ -96,8 +96,8 @@ function startGame(name) {
     player.css('transform', 'rotate(0deg)');
 
     $('#start').css('display', 'none');
-    username.text(name);
-    usernameText = name;
+    playerName.text(name);
+    playerNameText = name;
     $('#game').css('display', 'block');
 
     meteors.forEach(meteor => {
@@ -682,7 +682,7 @@ function gameOver() {
         method: 'POST',
         dataType: 'json',
         data: {
-            username: usernameText,
+            player_name: playerNameText,
             score: secondsPassed
         },
         success: setTable,
@@ -700,7 +700,7 @@ function gameOver() {
 
             let row = $('<tr></tr>');
             row.append($('<td></td>').text(1));
-            row.append($('<td></td>').text(usernameText));
+            row.append($('<td></td>').text(playerNameText));
             row.append($('<td></td>').text(secondsPassed));
             row.append($('<td></td>').text(new Date()));
             row.attr('id', 'current');
@@ -718,7 +718,7 @@ function setTable(topRecords) {
     let table = $('<table></table>');
     tableWrapper.append(table);
 
-    table.append('<tr><th>№</th><th>Nickname</th><th>Score</th><th>Datetime</th></tr>');
+    table.append('<tr><th>№</th><th>Player name</th><th>Score</th><th>Date</th></tr>');
 
     let currentFound = false;
     for (let i = 0; i < topRecords.length; i++) {
@@ -730,7 +730,7 @@ function setTable(topRecords) {
         const date = new Date((parseInt(topRecords[i]['datetime']) - new Date().getTimezoneOffset() * 60) * 1000);
         row.append($('<td></td>').text(date.toLocaleDateString(undefined, {day: '2-digit'}) + '-' + date.toLocaleDateString(undefined, {month: '2-digit'}) + '-' + date.toLocaleDateString(undefined, {year: '2-digit'})));
 
-        if (topRecords[i].username === usernameText && topRecords[i].score == secondsPassed && !currentFound) {
+        if (topRecords[i].playerName === playerNameText && topRecords[i].score == secondsPassed && !currentFound) {
             row.attr('id', 'current');
             currentFound = true;
         }
@@ -745,7 +745,7 @@ function setTable(topRecords) {
 
 let startOver = $('#table-screen button');
 
-startOver.on('click', () => startGame(usernameText));
+startOver.on('click', () => startGame(playerNameText));
 
 //#endregion
 
